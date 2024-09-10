@@ -6,27 +6,66 @@
     xmlns:local="clr-namespace:Municipal_Services_Application"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Municipal_Services_Application.ViewModels"
-    Title="MainWindow" Width="800" Height="450"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
     mc:Ignorable="d">
 
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <!--  Include Resource Dictionary for Styles  -->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styling/GlobalStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
-        <!-- Navigation Buttons -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="Navigate to Report Issues" Command="{Binding NavigateCommand}" CommandParameter="ReportIssues"/>
-            <Button Content="Navigate to Local Events" Command="{Binding NavigateCommand}" CommandParameter="LocalEvents"/>
-            <Button Content="Navigate to Service Request Status" Command="{Binding NavigateCommand}" CommandParameter="ServiceRequestStatus"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="0" />
+            <!--  Small spacer column  -->
+            <ColumnDefinition Width="*" />
+            <!--  Main content and background  -->
+        </Grid.ColumnDefinitions>
+
+        <!--  Navigation Buttons  -->
+        <StackPanel Grid.Column="0" Orientation="Vertical">
+            <RadioButton
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ReportIssues"
+                Content="Report Issues"
+                Style="{StaticResource MenuBtn}" />
+
+            <RadioButton
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="LocalEvents"
+                Content="Local Events"
+                Style="{StaticResource MenuBtn}" />
+
+            <RadioButton
+                Height="50"
+                Padding="10,0,0,0"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ServiceRequestStatus"
+                Content="Service Request Status"
+                FontSize="14"
+                Foreground="Black"
+                Style="{StaticResource MenuBtn}" />
         </StackPanel>
 
-        <!-- Content Display Area -->
-        <ContentControl Grid.Row="1" Content="{Binding CurrentView}"/>
+        <!--  Spacer column  -->
+        <Border Grid.Column="1" Background="Transparent" />
+
+        <!--  Content Display Area with Background Image  -->
+        <Border Grid.Column="2" Background="{StaticResource ContentBackground}">
+            <ContentControl Content="{Binding CurrentView}" />
+        </Border>
     </Grid>
 </Window>

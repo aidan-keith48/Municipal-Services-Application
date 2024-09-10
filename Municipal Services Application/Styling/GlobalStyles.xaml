@@ -1,0 +1,116 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  Defined Colors  -->
+    <Color x:Key="DarkBlue">#010a5a</Color>
+    <Color x:Key="MediumBlue">#3176b1</Color>
+    <Color x:Key="LightBlue1">#4eb2d4</Color>
+    <Color x:Key="LightBlue2">#6ec7e1</Color>
+    <Color x:Key="LightBlue3">#8edce9</Color>
+
+    <ImageBrush x:Key="ContentBackground" ImageSource="/images/backgroundMun.jpg" />
+
+
+
+    <!--  Defined Brushes  -->
+    <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}" />
+    <SolidColorBrush x:Key="MediumBlueBrush" Color="{StaticResource MediumBlue}" />
+    <SolidColorBrush x:Key="LightBlue1Brush" Color="{StaticResource LightBlue1}" />
+    <SolidColorBrush x:Key="LightBlue2Brush" Color="{StaticResource LightBlue2}" />
+    <SolidColorBrush x:Key="LightBlue3Brush" Color="{StaticResource LightBlue3}" />
+
+
+    <!--  Label Style  -->
+    <Style x:Key="LabelStyle" TargetType="Label">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,10,0,0" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <!--  TextBox Style  -->
+    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <Setter Property="Margin" Value="0,5" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!--  ComboBox Style  -->
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Margin" Value="0,5" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Background" Value="#CC000080" />
+        <!--  Navy with transparency  -->
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Opacity" Value="0.7" />
+        <!--  Default slightly transparent  -->
+
+        <!--  Hover effect  -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Navy" />
+                <!--  Full color on hover  -->
+                <Setter Property="Opacity" Value="1" />
+                <!--  Fully opaque on hover  -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="MenuBtn"
+        BasedOn="{StaticResource {x:Type ToggleButton}}"
+        TargetType="{x:Type RadioButton}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter
+                            Margin="5,0,20,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <!--  Directly animating the Background property  -->
+                            <ColorAnimation
+                                Storyboard.TargetProperty="Background.Color"
+                                To="{StaticResource MediumBlue}"
+                                Duration="0:0:0.3" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="Background.Color"
+                                To="Transparent"
+                                Duration="0:0:0.3" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+</ResourceDictionary>

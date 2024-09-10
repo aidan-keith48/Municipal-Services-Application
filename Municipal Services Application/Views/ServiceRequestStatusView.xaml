@@ -14,7 +14,7 @@
             VerticalAlignment="Center"
             FontSize="24"
             FontWeight="Bold"
-            Text="Coming Soon" />
+            Text="Coming Soon Service request" />
 
     </Grid>
 </UserControl>
