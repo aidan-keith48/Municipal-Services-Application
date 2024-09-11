@@ -74,8 +74,12 @@
     </ApplicationDefinition>
     <Compile Include="FromValidation\CategoryValidationRule.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\IssueListViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportIssueViewModel.cs" />
+    <Compile Include="Views\IssueListView.xaml.cs">
+      <DependentUpon>IssueListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LocalEventsView.xaml.cs">
       <DependentUpon>LocalEventsView.xaml</DependentUpon>
     </Compile>
@@ -98,6 +102,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Styling\GlobalStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IssueListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

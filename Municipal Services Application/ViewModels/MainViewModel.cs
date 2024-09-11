@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using Municipal_Services_Application.Views;
 using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Municipal_Services_Application.ViewModels
@@ -42,20 +43,31 @@ namespace Municipal_Services_Application.ViewModels
                 switch (parameter.ToString())
                 {
                     case "ReportIssues":
-                        CurrentView = new ReportIssuesView(); // Assuming ReportIssuesView is a UserControl
+                        var reportIssuesView = new ReportIssuesView();
+                        reportIssuesView.DataContext = ReportIssueVM;
+                        CurrentView = reportIssuesView;
                         break;
+
                     case "LocalEvents":
-                        CurrentView = new LocalEvent_Annoucments(); // Assuming LocalEventsView is a UserControl
+                        var localEventsView = new LocalEvent_Annoucments();
+                        CurrentView = localEventsView;
                         break;
+
                     case "ServiceRequestStatus":
-                        CurrentView = new ServiceRequestStatus(); // Assuming ServiceRequestStatusView is a UserControl
+                        var serviceRequestStatusView = new ServiceRequestStatus();
+                        CurrentView = serviceRequestStatusView;
                         break;
+
+                    case "ViewReports": // Switch to the View Reports view
+                        var issueListView = new IssueListView();
+                        issueListView.DataContext = new IssueListViewModel(ReportIssueVM.GetAllIssues());
+                        CurrentView = issueListView;
+                        break;
+
                     default:
-                        // Handle unknown view request or show default view
                         break;
                 }
             }
         }
-
     }
 }

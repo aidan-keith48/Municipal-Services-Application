@@ -11,45 +11,42 @@
     mc:Ignorable="d">
     <Grid>
         <StackPanel Margin="10">
-            <!--  Location Input  -->
             <Label Content="Location:" />
             <TextBox
-                x:Name="locationTextBox"
                 Height="25"
-                Margin="0,0,0,10" />
-
-            <!--  Category Selection  -->
+                Margin="0,0,0,10"
+                Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
             <Label Content="Category:" />
             <ComboBox
-                x:Name="categoryComboBox"
                 Height="25"
-                Margin="0,0,0,10">
+                Margin="0,0,0,10"
+                SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBoxItem Content="Sanitation" />
                 <ComboBoxItem Content="Roads" />
                 <ComboBoxItem Content="Utilities" />
             </ComboBox>
-
-            <!--  Description Box  -->
             <Label Content="Description:" />
-            <RichTextBox
-                x:Name="descriptionRichTextBox"
+            <TextBox
                 MinHeight="100"
-                Margin="0,0,0,10" />
-
-
+                Margin="0,0,0,10"
+                Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
             <Button
-                x:Name="AttachFileBtn"
                 Height="25"
                 Margin="0,0,0,10"
-                Click="AttachFileBtn_Click"
-                Content="Attach File" />
-
+                Command="{Binding AttachImageCommand}"
+                Content="Attach Image" />
             <Button
-                x:Name="SubmitReportBtn"
                 Height="25"
                 Margin="0,0,0,10"
-                Click="SubmitReportBtn_Click"
+                Command="{Binding SubmitCommand}"
                 Content="Submit Report" />
+            <Button
+                Height="25"
+                Margin="0,0,0,10"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ViewReports"
+                Content="View Reports" />
+
         </StackPanel>
     </Grid>
 </UserControl>

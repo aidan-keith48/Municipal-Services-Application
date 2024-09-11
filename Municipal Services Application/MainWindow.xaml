@@ -36,28 +36,37 @@
         <!--  Navigation Buttons  -->
         <StackPanel Grid.Column="0" Orientation="Vertical">
             <RadioButton
-                Height="50"
-                Command="{Binding NavigateCommand}"
-                CommandParameter="ReportIssues"
-                Content="Report Issues"
-                Style="{StaticResource MenuBtn}" />
+        Height="50"
+        Command="{Binding NavigateCommand}"
+        CommandParameter="ReportIssues"
+        Content="Report Issues"
+        Style="{StaticResource MenuBtn}" />
 
             <RadioButton
-                Height="50"
-                Command="{Binding NavigateCommand}"
-                CommandParameter="LocalEvents"
-                Content="Local Events"
-                Style="{StaticResource MenuBtn}" />
+        Height="50"
+        Command="{Binding NavigateCommand}"
+        CommandParameter="LocalEvents"
+        Content="Local Events"
+        Style="{StaticResource MenuBtn}" />
 
             <RadioButton
-                Height="50"
-                Padding="10,0,0,0"
-                Command="{Binding NavigateCommand}"
-                CommandParameter="ServiceRequestStatus"
-                Content="Service Request Status"
-                FontSize="14"
-                Foreground="Black"
-                Style="{StaticResource MenuBtn}" />
+        Height="50"
+        Command="{Binding NavigateCommand}"
+        CommandParameter="ServiceRequestStatus"
+        Content="Service Request Status"
+        FontSize="14"
+        Foreground="Black"
+        Style="{StaticResource MenuBtn}" />
+
+            <!-- New View Reports button -->
+            <RadioButton
+        Height="50"
+        Command="{Binding NavigateCommand}"
+        CommandParameter="ViewReports"
+        Content="View Reports"
+        FontSize="14"
+        Foreground="Black"
+        Style="{StaticResource MenuBtn}" />
         </StackPanel>
 
         <!--  Spacer column  -->

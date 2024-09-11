@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -17,23 +16,13 @@ using System.Windows.Shapes;
 namespace Municipal_Services_Application.Views
 {
     /// <summary>
-    /// Interaction logic for ReportIssuesView.xaml
+    /// Interaction logic for IssueListView.xaml
     /// </summary>
-    public partial class ReportIssuesView : System.Windows.Controls.UserControl
+    public partial class IssueListView : UserControl
     {
-        public ReportIssuesView()
+        public IssueListView()
         {
             InitializeComponent();
-        }
-
-        private void AttachFileBtn_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void SubmitReportBtn_Click(object sender, RoutedEventArgs e)
-        {
-            //System.Windows.MessageBox.Show("Report submitted successfully!");
         }
     }
 }
