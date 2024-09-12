@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Municipal_Services_Application.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="http://schemas.microsoft.com/winfx/2009/xaml"
     d:DesignHeight="450"
     d:DesignWidth="800"
     Background="{StaticResource MediumBlueBrush}"
@@ -20,11 +21,11 @@
             <ComboBox
                 Height="25"
                 Margin="0,0,0,10"
-                SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}">
-                <ComboBoxItem Content="Sanitation" />
-                <ComboBoxItem Content="Roads" />
-                <ComboBoxItem Content="Utilities" />
-            </ComboBox>
+                ItemsSource="{Binding Categories}"
+                SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}" />
+
+
+
             <Label Content="Description:" />
             <TextBox
                 MinHeight="100"
