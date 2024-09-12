@@ -5,48 +5,50 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Municipal_Services_Application.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:sys="http://schemas.microsoft.com/winfx/2009/xaml"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    Background="{StaticResource MediumBlueBrush}"
+    Background="Gray"
     mc:Ignorable="d">
+
+    <!--  This UserControl represents the view for reporting issues in the Municipal Services Application.  -->
+
     <Grid>
         <StackPanel Margin="10">
+            <!--  Label for the location input field  -->
             <Label Content="Location:" />
-            <TextBox
-                Height="25"
-                Margin="0,0,0,10"
-                Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
+            <!--  TextBox for entering the location of the issue  -->
+            <TextBox Style="{StaticResource RoundedTextBox}" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
+
+            <!--  Label for the category selection field  -->
             <Label Content="Category:" />
+            <!--  ComboBox for selecting the category of the issue  -->
             <ComboBox
                 Height="25"
                 Margin="0,0,0,10"
                 ItemsSource="{Binding Categories}"
                 SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}" />
 
-
-
+            <!--  Label for the description input field  -->
             <Label Content="Description:" />
+            <!--  TextBox for entering the description of the issue  -->
             <TextBox
                 MinHeight="100"
                 Margin="0,0,0,10"
-                Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                Style="{StaticResource RoundedTextBox}"
+                Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap" />
+
+            <!--  Button for attaching an image to the issue report  -->
             <Button
-                Height="25"
                 Margin="0,0,0,10"
                 Command="{Binding AttachImageCommand}"
-                Content="Attach Image" />
+                Content="Attach Image"
+                Style="{StaticResource RoundedButton}" />
+
+            <!--  Button for submitting the issue report  -->
             <Button
-                Height="25"
                 Margin="0,0,0,10"
                 Command="{Binding SubmitCommand}"
-                Content="Submit Report" />
-            <Button
-                Height="25"
-                Margin="0,0,0,10"
-                Command="{Binding NavigateCommand}"
-                CommandParameter="ViewReports"
-                Content="View Reports" />
+                Content="Submit Report"
+                Style="{StaticResource RoundedButton}" />
 
         </StackPanel>
     </Grid>

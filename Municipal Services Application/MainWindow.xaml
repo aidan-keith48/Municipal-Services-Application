@@ -6,19 +6,21 @@
     xmlns:local="clr-namespace:Municipal_Services_Application"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Municipal_Services_Application.ViewModels"
-    Title="MainWindow"
+    Title="Municipal Report Service"
     Width="800"
     Height="450"
     mc:Ignorable="d">
 
+    <!--  Set the DataContext to the MainViewModel  -->
     <Window.DataContext>
-        <vm:MainViewModel/>
+        <vm:MainViewModel />
     </Window.DataContext>
 
     <!--  Include Resource Dictionary for Styles  -->
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!--  Import GlobalStyles.xaml for styling  -->
                 <ResourceDictionary Source="/Styling/GlobalStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -26,47 +28,62 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
+            <!--  Auto-sized column for navigation buttons  -->
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="0" />
             <!--  Small spacer column  -->
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0" />
             <!--  Main content and background  -->
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!--  Navigation Buttons  -->
         <StackPanel Grid.Column="0" Orientation="Vertical">
-            <RadioButton
-        Height="50"
-        Command="{Binding NavigateCommand}"
-        CommandParameter="ReportIssues"
-        Content="Report Issues"
-        Style="{StaticResource MenuBtn}" />
 
-            <RadioButton
-        Height="50"
-        Command="{Binding NavigateCommand}"
-        CommandParameter="LocalEvents"
-        Content="Local Events"
-        Style="{StaticResource MenuBtn}" />
+            <!-- Logo Section -->
+            <Image Source="/images/Screenshot 2024-09-12 140623.png" Height="100" Width="150" Margin="0,0,0,20" HorizontalAlignment="Center" />
 
-            <RadioButton
-        Height="50"
-        Command="{Binding NavigateCommand}"
-        CommandParameter="ServiceRequestStatus"
-        Content="Service Request Status"
-        FontSize="14"
-        Foreground="Black"
-        Style="{StaticResource MenuBtn}" />
 
-            <!-- New View Reports button -->
+            <!--  Report Issues button  -->
             <RadioButton
-        Height="50"
-        Command="{Binding NavigateCommand}"
-        CommandParameter="ViewReports"
-        Content="View Reports"
-        FontSize="14"
-        Foreground="Black"
-        Style="{StaticResource MenuBtn}" />
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ReportIssues"
+                Content="Report Issues"
+                FontSize="14"
+                FontWeight="Bold"
+                Style="{StaticResource MenuBtn}" />
+
+            <!--  Local Events button  -->
+            <RadioButton
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="LocalEvents"
+                Content="Local Events"
+                FontSize="14"
+                FontWeight="Bold"
+                Style="{StaticResource MenuBtn}" />
+
+            <!--  Service Request Status button  -->
+            <RadioButton
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ServiceRequestStatus"
+                Content="Service Request Status"
+                FontSize="14"
+                FontWeight="Bold"
+                Foreground="Black"
+                Style="{StaticResource MenuBtn}" />
+
+            <!--  View Reports button  -->
+            <RadioButton
+                Height="50"
+                Command="{Binding NavigateCommand}"
+                CommandParameter="ViewReports"
+                Content="View Reports"
+                FontSize="14"
+                FontWeight="Bold"
+                Foreground="Black"
+                Style="{StaticResource MenuBtn}" />
         </StackPanel>
 
         <!--  Spacer column  -->

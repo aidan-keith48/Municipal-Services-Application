@@ -7,14 +7,39 @@ using System.Windows.Media.Imaging;
 
 namespace Municipal_Services_Application.Model
 {
+    /// <summary>
+    /// Represents an issue ticket in the municipal services application.
+    /// </summary>
     public class IssueTicket
     {
+        /// <summary>
+        /// Gets or sets the unique ID for each issue.
+        /// </summary>
+        public int ID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the location of the issue.
+        /// </summary>
         public string Location { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category of the issue.
+        /// </summary>
         public string Category { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description of the issue.
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of image attachments for the issue.
+        /// </summary>
         public List<string> ImageAttachments { get; set; } = new List<string>();
 
-        // Assuming you want to show the first image in the list as a preview
+        /// <summary>
+        /// Gets the first image in the list as a preview.
+        /// </summary>
         public BitmapImage ImagePreview
         {
             get
@@ -27,7 +52,9 @@ namespace Municipal_Services_Application.Model
             }
         }
 
-        // Helper to display all image paths as a string (if needed for listing attachments)
+        /// <summary>
+        /// Gets a string representation of all image paths as a comma-separated list.
+        /// </summary>
         public string AttachmentsAsString => string.Join(", ", ImageAttachments);
     }
 }

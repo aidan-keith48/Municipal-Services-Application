@@ -34,6 +34,8 @@
 
                             <!--  StackPanel for the text fields  -->
                             <StackPanel Grid.Column="1" Margin="10">
+                                <TextBlock FontWeight="Bold" Text="Report ID: " />
+                                <TextBlock Text="{Binding ID}" />
                                 <TextBlock FontWeight="Bold" Text="Location:" />
                                 <TextBlock Margin="0,0,0,10" Text="{Binding Location}" />
 

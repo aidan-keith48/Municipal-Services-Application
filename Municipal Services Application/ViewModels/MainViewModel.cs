@@ -6,25 +6,43 @@ using System.Windows.Input;
 
 namespace Municipal_Services_Application.ViewModels
 {
+    /// <summary>
+    /// The main view model for the application.
+    /// </summary>
     public class MainViewModel : BaseViewModel
     {
+        /// <summary>
+        /// Gets the report issue view model.
+        /// </summary>
         public ReportIssueViewModel ReportIssueVM { get; private set; }
 
+        /// <summary>
+        /// Gets the navigate command.
+        /// </summary>
         public ICommand NavigateCommand { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
+        /// </summary>
         public MainViewModel()
         {
             ReportIssueVM = new ReportIssueViewModel();
             InitializeCommands();
         }
+        //-------------------------------------------------------------------------------------------
 
         private void InitializeCommands()
         {
             // Assuming PerformNavigation method correctly accepts an 'object' parameter
             NavigateCommand = new RelayCommand<object>(PerformNavigation);
         }
+        //-------------------------------------------------------------------------------------------
 
         private object _currentView;
+
+        /// <summary>
+        /// Gets or sets the current view.
+        /// </summary>
         public object CurrentView
         {
             get => _currentView;
@@ -34,8 +52,12 @@ namespace Municipal_Services_Application.ViewModels
                 OnPropertyChanged(nameof(CurrentView)); // Notify the UI of the change
             }
         }
+        //-------------------------------------------------------------------------------------------
 
-
+        /// <summary>
+        /// This method performs navigation based on the parameter.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void PerformNavigation(object parameter)
         {
             if (parameter != null)
@@ -69,5 +91,7 @@ namespace Municipal_Services_Application.ViewModels
                 }
             }
         }
+        //-------------------------------------------------------------------------------------------
     }
 }
+//---------------------------------------------------------------------------End of File--------------------------------------------------------------------------------
