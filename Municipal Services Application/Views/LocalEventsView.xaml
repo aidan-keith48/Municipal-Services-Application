@@ -11,95 +11,89 @@
     mc:Ignorable="d">
 
     <Grid>
-        <!--  Use a grid with two columns, one flexible width for content and one fixed for filters  -->
+        <!-- Use a grid with two columns, one flexible width for content and one fixed for filters -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <!--  Flexible width for the rest (content)  -->
             <ColumnDefinition Width="258" />
-            <!--  Fixed width for the filter section  -->
         </Grid.ColumnDefinitions>
 
-        <!--  Tab Control for Events and Announcements (on the left)  -->
-        <TabControl Grid.Column="0" Margin="20,20,10,10">
-            <!--  Events Tab  -->
+        <!-- Tab Control for Events and Announcements -->
+        <TabControl Margin="10,10,10,10">
+            <!-- Events Tab -->
             <TabItem Header="Local Events">
-                <ListBox
-                    Margin="0,10,0,0"
-                    d:ItemsSource="{d:SampleData ItemCount=5}"
-                    ItemsSource="{Binding Events}">
+                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Events}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="5">
-                                <TextBlock FontWeight="Bold" Text="{Binding EventName}" />
-                                <TextBlock Text="{Binding EventDate}" />
-                                <TextBlock Text="{Binding EventCategory}" />
-                            </StackPanel>
+                            <Border
+                                Margin="10,5,10,5"
+                                Padding="10"
+                                Background="#f9f9f9"
+                                BorderBrush="LightGray"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                                <StackPanel>
+                                    <TextBlock FontSize="16" FontWeight="Bold" Foreground="#333" Text="{Binding EventName}" />
+                                    <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" Foreground="#444" Text="Date: " />
+                                        <TextBlock Foreground="#666" Text="{Binding EventDate}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" Foreground="#444" Text="Category: " />
+                                        <TextBlock Foreground="#666" Text="{Binding Category}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </TabItem>
 
-            <!--  Announcements Tab  -->
+            <!-- Announcements Tab -->
             <TabItem Header="Announcements">
-                <ListBox
-                    Margin="0,10,0,0"
-                    d:ItemsSource="{d:SampleData ItemCount=5}"
-                    ItemsSource="{Binding Announcements}">
+                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Announcements}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="5">
-                                <TextBlock FontWeight="Bold" Text="{Binding AnnouncementTitle}" />
-                                <TextBlock Text="{Binding AnnouncementDate}" />
-                                <TextBlock Text="{Binding AnnouncementContent}" />
-                            </StackPanel>
+                            <Border
+                                Margin="10,5,10,5"
+                                Padding="10"
+                                Background="#f9f9f9"
+                                BorderBrush="LightGray"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                                <StackPanel>
+                                    <TextBlock FontSize="16" FontWeight="Bold" Foreground="#333" Text="{Binding AnnouncementTitle}" />
+                                    <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                        <TextBlock FontWeight="Bold" Foreground="#444" Text="Date: " />
+                                        <TextBlock Foreground="#666" Text="{Binding AnnouncementDate}" />
+                                    </StackPanel>
+                                    <TextBlock Foreground="#666" Text="{Binding AnnouncementContent}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </TabItem>
         </TabControl>
 
-        <!--  Search and Filter Panel on the right  -->
-        <StackPanel
-            Grid.Column="1"
-            Width="229"
-            Margin="10,20,0,20"
-            HorizontalAlignment="Left"
-            Orientation="Vertical">
-            <!--  Search by Category  -->
-            <TextBlock
-                VerticalAlignment="Center"
-                Style="{StaticResource LabelStyle}"
-                Text="Category:" />
-            <ComboBox
-                Width="200"
-                Margin="0,5,0,0"
-                Style="{StaticResource ComboBoxStyle}">
+        <!-- Search and Filter Panel on the right -->
+        <StackPanel Grid.Column="1" Width="229" Margin="10,20,0,20" HorizontalAlignment="Left" Orientation="Vertical">
+            <TextBlock VerticalAlignment="Center" Style="{StaticResource LabelStyle}" Text="Category:" />
+            <ComboBox Width="200" Margin="0,5,0,0" Style="{StaticResource ComboBoxStyle}"
+                      SelectedItem="{Binding SelectedCategory, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBoxItem Content="All Categories" />
                 <ComboBoxItem Content="Music" />
                 <ComboBoxItem Content="Sports" />
                 <ComboBoxItem Content="Festivals" />
             </ComboBox>
 
-            <!--  Search by Date  -->
-            <TextBlock
-                Margin="20,10,0,0"
-                VerticalAlignment="Center"
-                Style="{StaticResource LabelStyle}"
-                Text="Date:" />
-            <DatePicker
-                Width="200"
-                Margin="0,5,0,0"
-                Style="{StaticResource DatePickerStyle}" />
+            <TextBlock Margin="20,10,0,0" VerticalAlignment="Center" Style="{StaticResource LabelStyle}" Text="Date:" />
+            <DatePicker Width="200" Margin="0,5,0,0" Style="{StaticResource DatePickerStyle}"
+                        SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}" />
 
-            <!--  Search Button  -->
-            <Button
-                Width="200"
-                Height="48"
-                Margin="0,20,0,0"
-                VerticalAlignment="Center"
-                BorderThickness="0"
-                Content="Search for Content"
-                Style="{StaticResource SearchButtonStyle}" />
+            <!-- Search Button -->
+            <Button Width="200" Height="48" Margin="0,20,0,0" VerticalAlignment="Center"
+                    BorderThickness="0" Content="Search for Content" Command="{Binding SearchCommand}"
+                    Style="{StaticResource SearchButtonStyle}" />
         </StackPanel>
     </Grid>
 </UserControl>

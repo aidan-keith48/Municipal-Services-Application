@@ -73,8 +73,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="FromValidation\CategoryValidationRule.cs" />
+    <Compile Include="Model\AnnouncementModel.cs" />
+    <Compile Include="Model\LocalEventsModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\IssueListViewModel.cs" />
+    <Compile Include="ViewModels\LocalEventsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportIssueViewModel.cs" />
     <Compile Include="Views\IssueListView.xaml.cs">

@@ -23,6 +23,7 @@ namespace Municipal_Services_Application.Views
         public LocalEvent_Annoucments()
         {
             InitializeComponent();
+            DataContext = new LocalEventsViewModel();
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
