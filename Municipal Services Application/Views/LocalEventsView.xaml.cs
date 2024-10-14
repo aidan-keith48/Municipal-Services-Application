@@ -24,5 +24,10 @@ namespace Municipal_Services_Application.Views
         {
             InitializeComponent();
         }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
