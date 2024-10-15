@@ -101,59 +101,85 @@ public class LocalEventsViewModel : BaseViewModel
         UpdateAnnouncementsList();
     }
 
-    // Search for events based on date and category
     public IEnumerable<LocalEventsModel> SearchEvents(DateTime? date, string category)
     {
-        HashSet<LocalEventsModel> resultSet = null;
+        // Start with all events
+        var allEvents = _eventsByCategory.Values.SelectMany(e => e).ToHashSet();
 
-        // Search by date
-        if (date.HasValue && _eventsByDate.ContainsKey(date.Value))
+        // Filter by category if a specific category is selected (ignoring "All Categories")
+        if (!string.IsNullOrEmpty(category) && category != "All Categories")
         {
-            resultSet = _eventsByDate[date.Value];
-        }
-
-        // Search by category
-        if (!string.IsNullOrEmpty(category) && _eventsByCategory.ContainsKey(category))
-        {
-            if (resultSet != null)
+            if (_eventsByCategory.ContainsKey(category))
             {
-                resultSet = resultSet.Intersect(_eventsByCategory[category]).ToHashSet();
+                // Filter by selected category
+                allEvents = _eventsByCategory[category].ToHashSet();
             }
             else
             {
-                resultSet = _eventsByCategory[category];
+                // No events for the selected category
+                return Enumerable.Empty<LocalEventsModel>();
             }
         }
 
-        return resultSet ?? Enumerable.Empty<LocalEventsModel>();
+        // Filter by date if a date is selected
+        if (date.HasValue)
+        {
+            if (_eventsByDate.ContainsKey(date.Value))
+            {
+                // Intersect the results by date
+                allEvents = allEvents.Intersect(_eventsByDate[date.Value]).ToHashSet();
+            }
+            else
+            {
+                // No events for the selected date
+                return Enumerable.Empty<LocalEventsModel>();
+            }
+        }
+
+        return allEvents;
     }
 
-    // Search for announcements based on date and category
+
+
     public IEnumerable<AnnouncementModel> SearchAnnouncements(DateTime? date, string category)
     {
-        HashSet<AnnouncementModel> resultSet = null;
+        // Start with all announcements
+        var allAnnouncements = _announcementsByCategory.Values.SelectMany(a => a).ToHashSet();
 
-        // Search by date
-        if (date.HasValue && _announcementsByDate.ContainsKey(date.Value))
+        // Filter by category if a specific category is selected (ignoring "All Categories")
+        if (!string.IsNullOrEmpty(category) && category != "All Categories")
         {
-            resultSet = _announcementsByDate[date.Value];
-        }
-
-        // Search by category
-        if (!string.IsNullOrEmpty(category) && _announcementsByCategory.ContainsKey(category))
-        {
-            if (resultSet != null)
+            if (_announcementsByCategory.ContainsKey(category))
             {
-                resultSet = resultSet.Intersect(_announcementsByCategory[category]).ToHashSet();
+                // Filter by selected category
+                allAnnouncements = _announcementsByCategory[category].ToHashSet();
             }
             else
             {
-                resultSet = _announcementsByCategory[category];
+                // No announcements for the selected category
+                return Enumerable.Empty<AnnouncementModel>();
             }
         }
 
-        return resultSet ?? Enumerable.Empty<AnnouncementModel>();
+        // Filter by date if a date is selected
+        if (date.HasValue)
+        {
+            if (_announcementsByDate.ContainsKey(date.Value))
+            {
+                // Intersect the results by date
+                allAnnouncements = allAnnouncements.Intersect(_announcementsByDate[date.Value]).ToHashSet();
+            }
+            else
+            {
+                // No announcements for the selected date
+                return Enumerable.Empty<AnnouncementModel>();
+            }
+        }
+
+        return allAnnouncements;
     }
+
+
 
     // Execute the search and update the UI
     private void Search()
@@ -161,18 +187,21 @@ public class LocalEventsViewModel : BaseViewModel
         var filteredEvents = SearchEvents(SelectedDate, SelectedCategory);
         var filteredAnnouncements = SearchAnnouncements(SelectedDate, SelectedCategory);
 
+        // Update Events
         Events.Clear();
         foreach (var ev in filteredEvents)
         {
             Events.Add(ev);
         }
 
+        // Update Announcements
         Announcements.Clear();
         foreach (var ann in filteredAnnouncements)
         {
             Announcements.Add(ann);
         }
     }
+
 
     // Dummy data for testing
     private void LoadDummyData()
