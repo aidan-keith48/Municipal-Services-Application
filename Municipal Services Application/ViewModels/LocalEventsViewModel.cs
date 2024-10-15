@@ -7,11 +7,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
+/// <summary>
+/// ViewModel for managing local events and announcements.
+/// </summary>
 public class LocalEventsViewModel : BaseViewModel
 {
-    // Data structures to store events and announcements
+    // Data structures to store events, announcements, and recommended events
     private SortedDictionary<int, Queue<LocalEventsModel>> _eventQueue;
     private Dictionary<string, AnnouncementModel> _announcementsDictionary;
+    private Dictionary<int, RecommendedEventsModel> _recommendedEventsDictionary; // For recommendations
 
     // Sets for efficient searching
     private Dictionary<DateTime, HashSet<LocalEventsModel>> _eventsByDate;
@@ -27,16 +31,20 @@ public class LocalEventsViewModel : BaseViewModel
     // Observable collections to bind to the UI
     public ObservableCollection<LocalEventsModel> Events { get; set; }
     public ObservableCollection<AnnouncementModel> Announcements { get; set; }
-    public ObservableCollection<LocalEventsModel> RecommendedEvents { get; set; }
+    public ObservableCollection<RecommendedEventsModel> RecommendedEvents { get; set; }  // For recommendations
 
     // Command for search functionality
     public ICommand SearchCommand { get; private set; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LocalEventsViewModel"/> class.
+    /// </summary>
     public LocalEventsViewModel()
     {
         // Initialize data structures
         _eventQueue = new SortedDictionary<int, Queue<LocalEventsModel>>();
         _announcementsDictionary = new Dictionary<string, AnnouncementModel>();
+        _recommendedEventsDictionary = new Dictionary<int, RecommendedEventsModel>();  // For recommendations
 
         _eventsByDate = new Dictionary<DateTime, HashSet<LocalEventsModel>>();
         _eventsByCategory = new Dictionary<string, HashSet<LocalEventsModel>>();
@@ -46,14 +54,17 @@ public class LocalEventsViewModel : BaseViewModel
 
         Events = new ObservableCollection<LocalEventsModel>();
         Announcements = new ObservableCollection<AnnouncementModel>();
-        RecommendedEvents = new ObservableCollection<LocalEventsModel>();
+        RecommendedEvents = new ObservableCollection<RecommendedEventsModel>();  // For recommendations
 
         SearchCommand = new RelayCommand(Search);
 
-        LoadDummyData(); // For testing
+        LoadDummyData();  // Load dummy data for testing
     }
 
-    // Add events to the priority queue and sets
+    /// <summary>
+    /// Adds a new event to the event queue and relevant sets.
+    /// </summary>
+    /// <param name="newEvent">The new event to add.</param>
     public void AddEvent(LocalEventsModel newEvent)
     {
         if (!_eventQueue.ContainsKey(newEvent.Priority))
@@ -78,7 +89,11 @@ public class LocalEventsViewModel : BaseViewModel
         UpdateEventsList();
     }
 
-    // Add announcements to the dictionary and sets
+    /// <summary>
+    /// Adds a new announcement to the dictionary and relevant sets.
+    /// </summary>
+    /// <param name="newAnnouncement">The new announcement to add.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the announcement category is null.</exception>
     public void AddAnnouncement(AnnouncementModel newAnnouncement)
     {
         if (newAnnouncement.AnnouncementCategory == null)
@@ -103,10 +118,14 @@ public class LocalEventsViewModel : BaseViewModel
         UpdateAnnouncementsList();
     }
 
-    // Search for events based on date and category
+    /// <summary>
+    /// Searches for events based on the specified date and category.
+    /// </summary>
+    /// <param name="date">The date to filter events by.</param>
+    /// <param name="category">The category to filter events by.</param>
+    /// <returns>A collection of events matching the search criteria.</returns>
     public IEnumerable<LocalEventsModel> SearchEvents(DateTime? date, string category)
     {
-        // Start with all events
         var allEvents = _eventsByCategory.Values.SelectMany(e => e).ToHashSet();
 
         // Filter by category if a specific category is selected (ignoring "All Categories")
@@ -114,12 +133,10 @@ public class LocalEventsViewModel : BaseViewModel
         {
             if (_eventsByCategory.ContainsKey(category))
             {
-                // Filter by selected category
                 allEvents = _eventsByCategory[category].ToHashSet();
             }
             else
             {
-                // No events for the selected category
                 return Enumerable.Empty<LocalEventsModel>();
             }
         }
@@ -129,31 +146,74 @@ public class LocalEventsViewModel : BaseViewModel
         {
             if (_eventsByDate.ContainsKey(date.Value))
             {
-                // Intersect the results by date
                 allEvents = allEvents.Intersect(_eventsByDate[date.Value]).ToHashSet();
             }
             else
             {
-                // No events for the selected date
                 return Enumerable.Empty<LocalEventsModel>();
             }
         }
 
-        // Increment the SearchCounter for the filtered events
+        // Increment the SearchCounter for the filtered events and update recommendations
         foreach (var ev in allEvents)
         {
             ev.SearchCounter++;
+            UpdateRecommendedEvents(ev);
         }
 
         return allEvents;
     }
 
-    // Search for announcements based on date and category
+    /// <summary>
+    /// Updates the recommended events list based on the search counter.
+    /// </summary>
+    /// <param name="eventItem">The event item to update recommendations for.</param>
+    private void UpdateRecommendedEvents(LocalEventsModel eventItem)
+    {
+        if (_recommendedEventsDictionary.ContainsKey(eventItem.Id))
+        {
+            var recommendedEvent = _recommendedEventsDictionary[eventItem.Id];
+            recommendedEvent.SearchCounter = eventItem.SearchCounter;
+        }
+        else
+        {
+            var newRecommendedEvent = new RecommendedEventsModel(
+                eventItem.Id, eventItem.EventName, eventItem.EventDate,
+                eventItem.Category, eventItem.IsUrgent, eventItem.Priority,
+                eventItem.SearchCounter);
+
+            _recommendedEventsDictionary.Add(newRecommendedEvent.Id, newRecommendedEvent);
+        }
+
+        UpdateRecommendedEventsList();
+    }
+
+    /// <summary>
+    /// Updates the ObservableCollection for Recommended Events.
+    /// </summary>
+    private void UpdateRecommendedEventsList()
+    {
+        var recommended = _recommendedEventsDictionary.Values
+            .OrderByDescending(e => e.SearchCounter)
+            .Take(10);  // Get top 10 most searched events
+
+        RecommendedEvents.Clear();
+        foreach (var ev in recommended)
+        {
+            RecommendedEvents.Add(ev);
+        }
+    }
+
+    /// <summary>
+    /// Searches for announcements based on the specified date and category.
+    /// </summary>
+    /// <param name="date">The date to filter announcements by.</param>
+    /// <param name="category">The category to filter announcements by.</param>
+    /// <returns>A collection of announcements matching the search criteria.</returns>
     public IEnumerable<AnnouncementModel> SearchAnnouncements(DateTime? date, string category)
     {
         var allAnnouncements = _announcementsByCategory.Values.SelectMany(a => a).ToHashSet();
 
-        // Filter by category if a specific category is selected (ignoring "All Categories")
         if (!string.IsNullOrEmpty(category) && category != "All Categories")
         {
             if (_announcementsByCategory.ContainsKey(category))
@@ -166,7 +226,6 @@ public class LocalEventsViewModel : BaseViewModel
             }
         }
 
-        // Filter by date if a date is selected
         if (date.HasValue)
         {
             if (_announcementsByDate.ContainsKey(date.Value))
@@ -182,55 +241,30 @@ public class LocalEventsViewModel : BaseViewModel
         return allAnnouncements;
     }
 
-    // Execute the search and update the UI
+    /// <summary>
+    /// Executes the search and updates the UI with the filtered events and announcements.
+    /// </summary>
     private void Search()
     {
         var filteredEvents = SearchEvents(SelectedDate, SelectedCategory);
         var filteredAnnouncements = SearchAnnouncements(SelectedDate, SelectedCategory);
 
-        // Update Events
         Events.Clear();
         foreach (var ev in filteredEvents)
         {
             Events.Add(ev);
         }
 
-        // Update Announcements
         Announcements.Clear();
         foreach (var ann in filteredAnnouncements)
         {
             Announcements.Add(ann);
         }
-
-        // Update the recommended events list
-        UpdateRecommendedEventsList();
     }
 
-    // Update the ObservableCollection for Recommended Events
-    private void UpdateRecommendedEventsList()
-    {
-        var recommended = _eventQueue.Values.SelectMany(q => q)
-            .OrderByDescending(e => e.SearchCounter)
-            .Take(10);  // Get top 10 most searched events
-
-        RecommendedEvents.Clear();
-        foreach (var ev in recommended)
-        {
-            RecommendedEvents.Add(ev);
-        }
-    }
-
-    // Dummy data for testing
-    private void LoadDummyData()
-    {
-        AddEvent(new LocalEventsModel(1, "Music Festival", DateTime.Now.AddDays(5), "Music", false, 1));
-        AddEvent(new LocalEventsModel(2, "Sports Day", DateTime.Now.AddDays(3), "Sports", true, 2));
-
-        AddAnnouncement(new AnnouncementModel(1, "Water Cut Announcement", "There will be a water cut in your area.", "Water Announcement", DateTime.Now, true, 1));
-        AddAnnouncement(new AnnouncementModel(2, "City Clean-up", "Join us for a city clean-up.", "Clean Up", DateTime.Now.AddDays(1), false, 2));
-    }
-
-    // Update the ObservableCollection for Events
+    /// <summary>
+    /// Updates the ObservableCollection for Events.
+    /// </summary>
     private void UpdateEventsList()
     {
         Events.Clear();
@@ -243,7 +277,9 @@ public class LocalEventsViewModel : BaseViewModel
         }
     }
 
-    // Update the ObservableCollection for Announcements
+    /// <summary>
+    /// Updates the ObservableCollection for Announcements.
+    /// </summary>
     private void UpdateAnnouncementsList()
     {
         Announcements.Clear();
@@ -252,4 +288,37 @@ public class LocalEventsViewModel : BaseViewModel
             Announcements.Add(announcement);
         }
     }
+
+    /// <summary>
+    /// Loads dummy data for testing purposes.
+    /// </summary>
+    private void LoadDummyData()
+    {
+        // Events
+        AddEvent(new LocalEventsModel(1, "Music Festival", DateTime.Now.AddDays(5), "Music", false, 1));
+        AddEvent(new LocalEventsModel(2, "Sports Day", DateTime.Now.AddDays(3), "Sports", true, 2));
+        AddEvent(new LocalEventsModel(3, "Art Exhibition", DateTime.Now.AddDays(7), "Art", false, 3));
+        AddEvent(new LocalEventsModel(4, "Food Truck Rally", DateTime.Now.AddDays(2), "Food", true, 1));
+        AddEvent(new LocalEventsModel(5, "Tech Conference", DateTime.Now.AddDays(10), "Technology", false, 2));
+        AddEvent(new LocalEventsModel(6, "Marathon", DateTime.Now.AddDays(15), "Sports", true, 1));
+        AddEvent(new LocalEventsModel(7, "Jazz Night", DateTime.Now.AddDays(8), "Music", false, 2));
+        AddEvent(new LocalEventsModel(8, "Literature Fair", DateTime.Now.AddDays(12), "Literature", true, 3));
+        AddEvent(new LocalEventsModel(9, "Photography Workshop", DateTime.Now.AddDays(9), "Art", false, 1));
+        AddEvent(new LocalEventsModel(10, "Yoga Retreat", DateTime.Now.AddDays(4), "Health", true, 2));
+        AddEvent(new LocalEventsModel(11, "Film Festival", DateTime.Now.AddDays(6), "Film", false, 2));
+        AddEvent(new LocalEventsModel(12, "Stand-up Comedy", DateTime.Now.AddDays(1), "Comedy", true, 1));
+
+        // Announcements
+        AddAnnouncement(new AnnouncementModel(1, "Water Cut Announcement", "There will be a water cut in your area.", "Water Announcement", DateTime.Now, true, 1));
+        AddAnnouncement(new AnnouncementModel(2, "City Clean-up", "Join us for a city clean-up.", "Clean Up", DateTime.Now.AddDays(1), false, 2));
+        AddAnnouncement(new AnnouncementModel(3, "New Library Opening", "A new library is opening in your neighborhood.", "Community", DateTime.Now.AddDays(3), false, 1));
+        AddAnnouncement(new AnnouncementModel(4, "Road Maintenance", "Road maintenance scheduled for next week.", "Roads", DateTime.Now.AddDays(2), true, 3));
+        AddAnnouncement(new AnnouncementModel(5, "Electricity Outage", "Scheduled electricity outage in your area.", "Electricity", DateTime.Now.AddDays(4), true, 1));
+        AddAnnouncement(new AnnouncementModel(6, "Public Holiday", "Reminder: Public holiday next week.", "General", DateTime.Now.AddDays(5), false, 2));
+        AddAnnouncement(new AnnouncementModel(7, "COVID-19 Vaccination Drive", "Vaccination drive in your area.", "Health", DateTime.Now.AddDays(2), true, 2));
+        AddAnnouncement(new AnnouncementModel(8, "Charity Fundraiser", "Charity fundraiser for local community.", "Charity", DateTime.Now.AddDays(7), false, 1));
+        AddAnnouncement(new AnnouncementModel(9, "Local Election", "Upcoming local election details.", "Politics", DateTime.Now.AddDays(10), true, 2));
+        AddAnnouncement(new AnnouncementModel(10, "New Park Inauguration", "A new park is opening in your town.", "Community", DateTime.Now.AddDays(3), false, 3));
+    }
+
 }

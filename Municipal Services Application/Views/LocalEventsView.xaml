@@ -21,7 +21,10 @@
         <TabControl Margin="10,10,10,10">
             <!--  Events Tab  -->
             <TabItem Header="Local Events">
-                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Events}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ListBox
+                    Margin="0,10,0,0"
+                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                    ItemsSource="{Binding Events}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -60,7 +63,10 @@
 
             <!--  Announcements Tab  -->
             <TabItem Header="Announcements">
-                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Announcements}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ListBox
+                    Margin="0,10,0,0"
+                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                    ItemsSource="{Binding Announcements}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -109,7 +115,10 @@
 
             <!--  Recommended Events Tab  -->
             <TabItem Header="Recommended Events">
-                <ListBox Margin="0,10,0,0" ItemsSource="{Binding RecommendedEvents}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                <ListBox
+                    Margin="0,10,0,0"
+                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                    ItemsSource="{Binding RecommendedEvents}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -160,9 +169,21 @@
                 <ComboBoxItem Content="All Categories" />
                 <ComboBoxItem Content="Music" />
                 <ComboBoxItem Content="Sports" />
-                <ComboBoxItem Content="Festivals" />
-                <ComboBoxItem Content="Water Annoucement" />
+                <ComboBoxItem Content="Art" />
+                <ComboBoxItem Content="Food" />
+                <ComboBoxItem Content="Technology" />
+                <ComboBoxItem Content="Health" />
+                <ComboBoxItem Content="Film" />
+                <ComboBoxItem Content="Literature" />
+                <ComboBoxItem Content="Comedy" />
+                <ComboBoxItem Content="Water Announcement" />
                 <ComboBoxItem Content="Clean Up" />
+                <ComboBoxItem Content="Community" />
+                <ComboBoxItem Content="Roads" />
+                <ComboBoxItem Content="Electricity" />
+                <ComboBoxItem Content="General" />
+                <ComboBoxItem Content="Charity" />
+                <ComboBoxItem Content="Politics" />
             </ComboBox>
 
             <TextBlock

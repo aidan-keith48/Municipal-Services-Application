@@ -74,6 +74,7 @@
     </ApplicationDefinition>
     <Compile Include="FromValidation\CategoryValidationRule.cs" />
     <Compile Include="Model\AnnouncementModel.cs" />
+    <Compile Include="Model\RecommenedEventsModel.cs" />
     <Compile Include="Model\LocalEventsModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\IssueListViewModel.cs" />
