@@ -72,7 +72,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FromValidation\CategoryValidationRule.cs" />
     <Compile Include="Model\AnnouncementModel.cs" />
     <Compile Include="Model\RecommenedEventsModel.cs" />
     <Compile Include="Model\LocalEventsModel.cs" />
