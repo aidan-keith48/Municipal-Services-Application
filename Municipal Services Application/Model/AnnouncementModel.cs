@@ -17,6 +17,7 @@ namespace Municipal_Services_Application.Model
         public bool IsUrgent { get; set; } // True if the announcement is urgent
         public int Priority { get; set; }   // 1 = High, 2 = Medium, 3 = Low
 
+
         public AnnouncementModel(int id, string title, string content, string category, DateTime date, bool isUrgent, int priority)
         {
             Id = id;

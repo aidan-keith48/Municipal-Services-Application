@@ -14,6 +14,7 @@ namespace Municipal_Services_Application.Model
         public string Category { get; set; }
         public bool IsUrgent { get; set; } // True if event is urgent
         public int Priority { get; set; }   // 1 = High, 2 = Medium, 3 = Low
+        public int SearchCounter { get; set; }   // New counter for recommendations
 
         public LocalEventsModel(int id, string eventName, DateTime eventDate, string category, bool isUrgent, int priority)
         {
@@ -23,6 +24,7 @@ namespace Municipal_Services_Application.Model
             Category = category;
             IsUrgent = isUrgent;
             Priority = priority;
+            SearchCounter = 0;
         }
     }
 

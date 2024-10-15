@@ -21,7 +21,7 @@
         <TabControl Margin="10,10,10,10">
             <!--  Events Tab  -->
             <TabItem Header="Local Events">
-                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Events}">
+                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Events}" d:ItemsSource="{d:SampleData ItemCount=5}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -60,7 +60,7 @@
 
             <!--  Announcements Tab  -->
             <TabItem Header="Announcements">
-                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Announcements}">
+                <ListBox Margin="0,10,0,0" ItemsSource="{Binding Announcements}" d:ItemsSource="{d:SampleData ItemCount=5}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -87,6 +87,51 @@
                                         Foreground="#666"
                                         Text="{Binding AnnouncementContent}"
                                         TextWrapping="Wrap" />
+
+                                    <TextBlock
+                                        Foreground="#666"
+                                        Text="{Binding AnnouncementCategory}"
+                                        TextWrapping="Wrap" />
+
+                                    <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                                        <TextBlock
+                                            FontWeight="Bold"
+                                            Foreground="#444"
+                                            Text="Category: " />
+                                        <TextBlock Foreground="#666" Text="{Binding AnnouncementCategory}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+
+            <!--  Recommended Events Tab  -->
+            <TabItem Header="Recommended Events">
+                <ListBox Margin="0,10,0,0" ItemsSource="{Binding RecommendedEvents}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="10,5,10,5"
+                                Padding="10"
+                                Background="#f9f9f9"
+                                BorderBrush="LightGray"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                                <StackPanel>
+                                    <TextBlock
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Foreground="#333"
+                                        Text="{Binding EventName}" />
+                                    <TextBlock Foreground="#666" Text="{Binding EventDate}" />
+                                    <TextBlock Foreground="#666" Text="{Binding Category}" />
+                                    <TextBlock
+                                        FontWeight="Bold"
+                                        Foreground="#444"
+                                        Text="Searches: " />
+                                    <TextBlock Foreground="#666" Text="{Binding SearchCounter}" />
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
@@ -116,6 +161,8 @@
                 <ComboBoxItem Content="Music" />
                 <ComboBoxItem Content="Sports" />
                 <ComboBoxItem Content="Festivals" />
+                <ComboBoxItem Content="Water Annoucement" />
+                <ComboBoxItem Content="Clean Up" />
             </ComboBox>
 
             <TextBlock

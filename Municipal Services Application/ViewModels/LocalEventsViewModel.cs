@@ -27,6 +27,7 @@ public class LocalEventsViewModel : BaseViewModel
     // Observable collections to bind to the UI
     public ObservableCollection<LocalEventsModel> Events { get; set; }
     public ObservableCollection<AnnouncementModel> Announcements { get; set; }
+    public ObservableCollection<LocalEventsModel> RecommendedEvents { get; set; }
 
     // Command for search functionality
     public ICommand SearchCommand { get; private set; }
@@ -45,6 +46,7 @@ public class LocalEventsViewModel : BaseViewModel
 
         Events = new ObservableCollection<LocalEventsModel>();
         Announcements = new ObservableCollection<AnnouncementModel>();
+        RecommendedEvents = new ObservableCollection<LocalEventsModel>();
 
         SearchCommand = new RelayCommand(Search);
 
@@ -101,6 +103,7 @@ public class LocalEventsViewModel : BaseViewModel
         UpdateAnnouncementsList();
     }
 
+    // Search for events based on date and category
     public IEnumerable<LocalEventsModel> SearchEvents(DateTime? date, string category)
     {
         // Start with all events
@@ -136,14 +139,18 @@ public class LocalEventsViewModel : BaseViewModel
             }
         }
 
+        // Increment the SearchCounter for the filtered events
+        foreach (var ev in allEvents)
+        {
+            ev.SearchCounter++;
+        }
+
         return allEvents;
     }
 
-
-
+    // Search for announcements based on date and category
     public IEnumerable<AnnouncementModel> SearchAnnouncements(DateTime? date, string category)
     {
-        // Start with all announcements
         var allAnnouncements = _announcementsByCategory.Values.SelectMany(a => a).ToHashSet();
 
         // Filter by category if a specific category is selected (ignoring "All Categories")
@@ -151,12 +158,10 @@ public class LocalEventsViewModel : BaseViewModel
         {
             if (_announcementsByCategory.ContainsKey(category))
             {
-                // Filter by selected category
                 allAnnouncements = _announcementsByCategory[category].ToHashSet();
             }
             else
             {
-                // No announcements for the selected category
                 return Enumerable.Empty<AnnouncementModel>();
             }
         }
@@ -166,20 +171,16 @@ public class LocalEventsViewModel : BaseViewModel
         {
             if (_announcementsByDate.ContainsKey(date.Value))
             {
-                // Intersect the results by date
                 allAnnouncements = allAnnouncements.Intersect(_announcementsByDate[date.Value]).ToHashSet();
             }
             else
             {
-                // No announcements for the selected date
                 return Enumerable.Empty<AnnouncementModel>();
             }
         }
 
         return allAnnouncements;
     }
-
-
 
     // Execute the search and update the UI
     private void Search()
@@ -200,8 +201,24 @@ public class LocalEventsViewModel : BaseViewModel
         {
             Announcements.Add(ann);
         }
+
+        // Update the recommended events list
+        UpdateRecommendedEventsList();
     }
 
+    // Update the ObservableCollection for Recommended Events
+    private void UpdateRecommendedEventsList()
+    {
+        var recommended = _eventQueue.Values.SelectMany(q => q)
+            .OrderByDescending(e => e.SearchCounter)
+            .Take(10);  // Get top 10 most searched events
+
+        RecommendedEvents.Clear();
+        foreach (var ev in recommended)
+        {
+            RecommendedEvents.Add(ev);
+        }
+    }
 
     // Dummy data for testing
     private void LoadDummyData()
@@ -209,8 +226,8 @@ public class LocalEventsViewModel : BaseViewModel
         AddEvent(new LocalEventsModel(1, "Music Festival", DateTime.Now.AddDays(5), "Music", false, 1));
         AddEvent(new LocalEventsModel(2, "Sports Day", DateTime.Now.AddDays(3), "Sports", true, 2));
 
-        AddAnnouncement(new AnnouncementModel(1, "Water Cut Announcement", "There will be a water cut in your area.", "Music", DateTime.Now, true, 1));
-        AddAnnouncement(new AnnouncementModel(2, "City Clean-up", "Join us for a city clean-up.", "Sport", DateTime.Now.AddDays(1), false, 2));
+        AddAnnouncement(new AnnouncementModel(1, "Water Cut Announcement", "There will be a water cut in your area.", "Water Announcement", DateTime.Now, true, 1));
+        AddAnnouncement(new AnnouncementModel(2, "City Clean-up", "Join us for a city clean-up.", "Clean Up", DateTime.Now.AddDays(1), false, 2));
     }
 
     // Update the ObservableCollection for Events
