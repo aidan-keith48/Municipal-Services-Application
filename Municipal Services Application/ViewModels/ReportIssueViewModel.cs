@@ -6,28 +6,42 @@ using System.Windows;
 using Microsoft.Win32;
 using Municipal_Services_Application.Model;
 using Municipal_Services_Application.ViewModels;
+using System.IO;
 
+/// <summary>
+/// ViewModel for reporting issues in the municipal services application.
+/// </summary>
 public class ReportIssueViewModel : BaseViewModel
 {
+    /// <summary>
+    /// Dictionary to store issues with their ID as the key.
+    /// </summary>
     private Dictionary<int, IssueTicket> _issuesDictionary = new Dictionary<int, IssueTicket>();
-    private int _nextIssueId = 1; // Dictionary key and Issue ID are both managed here
 
     /// <summary>
-    /// Gets or sets the list of categories to bind to the ComboBox.
+    /// The next available issue ID.
+    /// </summary>
+    private int _nextIssueId = 1;
+
+    /// <summary>
+    /// Collection of available categories for issues.
     /// </summary>
     public ObservableCollection<string> Categories { get; set; }
 
+    /// <summary>
+    /// The current issue being reported.
+    /// </summary>
     private IssueTicket _currentIssue = new IssueTicket();
 
     /// <summary>
-    /// Gets the command to submit the current issue.
+    /// Command to submit the current issue.
     /// </summary>
     public ICommand SubmitCommand { get; private set; }
 
     /// <summary>
-    /// Gets the command to attach an image to the current issue.
+    /// Command to attach files to the current issue.
     /// </summary>
-    public ICommand AttachImageCommand { get; private set; }
+    public ICommand AttachFileCommand { get; private set; }
 
     /// <summary>
     /// Gets or sets the location of the current issue.
@@ -35,9 +49,12 @@ public class ReportIssueViewModel : BaseViewModel
     public string Location
     {
         get => _currentIssue.Location;
-        set { _currentIssue.Location = value; OnPropertyChanged(nameof(Location)); }
+        set
+        {
+            _currentIssue.Location = value;
+            OnPropertyChanged(nameof(Location));
+        }
     }
-    //-------------------------------------------------------------------------------------------
 
     /// <summary>
     /// Gets or sets the category of the current issue.
@@ -45,9 +62,12 @@ public class ReportIssueViewModel : BaseViewModel
     public string Category
     {
         get => _currentIssue.Category;
-        set { _currentIssue.Category = value; OnPropertyChanged(nameof(Category)); }
+        set
+        {
+            _currentIssue.Category = value;
+            OnPropertyChanged(nameof(Category));
+        }
     }
-    //-------------------------------------------------------------------------------------------
 
     /// <summary>
     /// Gets or sets the description of the current issue.
@@ -55,109 +75,138 @@ public class ReportIssueViewModel : BaseViewModel
     public string Description
     {
         get => _currentIssue.Description;
-        set { _currentIssue.Description = value; OnPropertyChanged(nameof(Description)); }
+        set
+        {
+            _currentIssue.Description = value;
+            OnPropertyChanged(nameof(Description));
+        }
     }
-    //-------------------------------------------------------------------------------------------
-    
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ReportIssueViewModel"/> class.
     /// </summary>
     public ReportIssueViewModel()
     {
+        // Initialize categories
         Categories = new ObservableCollection<string>
-        {
-            "Sanitation",
-            "Roads",
-            "Utilities"
-        };
+                {
+                    "Sanitation",
+                    "Roads",
+                    "Utilities",
+                    "Water Supply",
+                    "Electricity",
+                    "Public Transport",
+                    "Clean Up",
+                    "Health",
+                    "Education",
+                    "Recreation",
+                    "Environment"
+                };
 
+        // Initialize commands
         SubmitCommand = new RelayCommand(SubmitIssue);
-        AttachImageCommand = new RelayCommand(AttachImage);
+        AttachFileCommand = new RelayCommand(AttachFile);
     }
-    //-------------------------------------------------------------------------------------------
 
     /// <summary>
-    /// Submits the current issue.
+    /// Submits the current issue after validating the input.
     /// </summary>
     private void SubmitIssue()
     {
-        if (string.IsNullOrWhiteSpace(Location) || string.IsNullOrWhiteSpace(Category) || string.IsNullOrWhiteSpace(Description))
+        // Input validation
+        if (string.IsNullOrWhiteSpace(Location) || Location.Length < 5 || Location.Length > 100)
         {
-            MessageBox.Show("Please fill in all the fields before submitting.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Please enter a valid location (5-100 characters).", "Invalid Location", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
+        if (string.IsNullOrWhiteSpace(Category) || !Categories.Contains(Category))
+        {
+            MessageBox.Show("Please select a valid category.", "Invalid Category", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Description) || Description.Length < 10)
+        {
+            MessageBox.Show("Please provide a detailed description (at least 10 characters).", "Invalid Description", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        if (_currentIssue.Attachments.Count == 0)
+        {
+            MessageBox.Show("Please attach at least one file.", "No Attachments", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        // Store the issue
         var storedIssue = new IssueTicket
         {
-            ID = _nextIssueId, // Set the unique ID for this issue
+            ID = _nextIssueId,
             Location = this.Location,
             Category = this.Category,
             Description = this.Description,
-            ImageAttachments = new List<string>(_currentIssue.ImageAttachments)
+            Attachments = new List<string>(_currentIssue.Attachments)
         };
 
-        // Store the issue in the dictionary using the ID as the key
         _issuesDictionary[_nextIssueId] = storedIssue;
-        _nextIssueId++; // Increment the ID for the next issue
+        _nextIssueId++;
 
-        // Display the submitted data
+        // Display confirmation message
         string submittedData = $"Issue Submitted!\n" +
-                               $"ID: {storedIssue.ID}\n" + // Display the ID
+                               $"ID: {storedIssue.ID}\n" +
                                $"Location: {storedIssue.Location}\n" +
                                $"Category: {storedIssue.Category}\n" +
                                $"Description: {storedIssue.Description}\n" +
-                               $"Attachments: {string.Join(", ", storedIssue.ImageAttachments)}";
+                               $"Attachments: {string.Join(", ", storedIssue.Attachments)}";
 
         MessageBox.Show(submittedData, "Submission Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
 
-        // Clear the current issue after submission
+        // Clear the current issue
         ClearCurrentIssue();
     }
-    //-------------------------------------------------------------------------------------------
 
     /// <summary>
-    /// Attaches an image to the current issue.
+    /// Opens a file dialog to attach files to the current issue.
     /// </summary>
-    private void AttachImage()
+    private void AttachFile()
     {
         OpenFileDialog openFileDialog = new OpenFileDialog
         {
             Multiselect = true,
-            Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp"
+            Filter = "All Supported Files|*.jpg;*.jpeg;*.png;*.bmp;*.pdf;*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.pptx|" +
+                     "Image Files|*.jpg;*.jpeg;*.png;*.bmp|" +
+                     "PDF Files|*.pdf|" +
+                     "Word Documents|*.doc;*.docx|" +
+                     "Excel Files|*.xls;*.xlsx|" +
+                     "PowerPoint Files|*.ppt;*.pptx"
         };
 
         if (openFileDialog.ShowDialog() == true)
         {
             foreach (var filePath in openFileDialog.FileNames)
             {
-                _currentIssue.ImageAttachments.Add(filePath);
+                _currentIssue.Attachments.Add(filePath);
             }
         }
     }
-    //-------------------------------------------------------------------------------------------
 
     /// <summary>
-    /// Clears the current issue.
+    /// Clears the current issue details.
     /// </summary>
     private void ClearCurrentIssue()
     {
         Location = string.Empty;
         Category = string.Empty;
         Description = string.Empty;
-        _currentIssue.ImageAttachments.Clear();
+        _currentIssue.Attachments.Clear();
     }
-    //-------------------------------------------------------------------------------------------
 
     /// <summary>
-    /// Gets all the issues stored in the dictionary.
+    /// Gets all reported issues.
     /// </summary>
-    /// <returns>A dictionary containing all the issues.</returns>
+    /// <returns>A dictionary of all reported issues.</returns>
     public Dictionary<int, IssueTicket> GetAllIssues()
     {
         return _issuesDictionary;
     }
-    //-------------------------------------------------------------------------------------------
 }
-
-//-------------------------------------------------------------------------End of File.-------------------------------------------------------------------------

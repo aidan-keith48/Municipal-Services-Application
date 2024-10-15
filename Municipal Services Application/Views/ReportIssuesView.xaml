@@ -39,8 +39,8 @@
             <!--  Button for attaching an image to the issue report  -->
             <Button
                 Margin="0,0,0,10"
-                Command="{Binding AttachImageCommand}"
-                Content="Attach Image"
+                Command="{Binding AttachFileCommand}"
+                Content="Attach File"
                 Style="{StaticResource RoundedButton}" />
 
             <!--  Button for submitting the issue report  -->
