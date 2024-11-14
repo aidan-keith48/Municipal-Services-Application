@@ -294,19 +294,22 @@ public class LocalEventsViewModel : BaseViewModel
     /// </summary>
     private void LoadDummyData()
     {
+        // Assuming images are located in the "Images" folder within the project directory
+        string imageFolderPath = "../images/eventpictures/";
+
         // Events
-        AddEvent(new LocalEventsModel(1, "Music Festival", DateTime.Now.AddDays(5), "Music", false, 1));
-        AddEvent(new LocalEventsModel(2, "Sports Day", DateTime.Now.AddDays(3), "Sports", true, 2));
-        AddEvent(new LocalEventsModel(3, "Art Exhibition", DateTime.Now.AddDays(7), "Art", false, 3));
-        AddEvent(new LocalEventsModel(4, "Food Truck Rally", DateTime.Now.AddDays(2), "Food", true, 1));
-        AddEvent(new LocalEventsModel(5, "Tech Conference", DateTime.Now.AddDays(10), "Technology", false, 2));
-        AddEvent(new LocalEventsModel(6, "Marathon", DateTime.Now.AddDays(15), "Sports", true, 1));
-        AddEvent(new LocalEventsModel(7, "Jazz Night", DateTime.Now.AddDays(8), "Music", false, 2));
-        AddEvent(new LocalEventsModel(8, "Literature Fair", DateTime.Now.AddDays(12), "Literature", true, 3));
-        AddEvent(new LocalEventsModel(9, "Photography Workshop", DateTime.Now.AddDays(9), "Art", false, 1));
-        AddEvent(new LocalEventsModel(10, "Yoga Retreat", DateTime.Now.AddDays(4), "Health", true, 2));
-        AddEvent(new LocalEventsModel(11, "Film Festival", DateTime.Now.AddDays(6), "Film", false, 2));
-        AddEvent(new LocalEventsModel(12, "Stand-up Comedy", DateTime.Now.AddDays(1), "Comedy", true, 1));
+        AddEvent(new LocalEventsModel(1, "Music Festival", DateTime.Now.AddDays(5), "Music", false, 1, $"{imageFolderPath}1.jpg", "A vibrant music festival featuring popular artists."));
+        AddEvent(new LocalEventsModel(2, "Sports Day", DateTime.Now.AddDays(3), "Sports", true, 2, $"{imageFolderPath}2.jpg", "A day filled with exciting sports activities and competitions."));
+        AddEvent(new LocalEventsModel(3, "Art Exhibition", DateTime.Now.AddDays(7), "Art", false, 3, $"{imageFolderPath}3.jpg", "Explore amazing art pieces by local and international artists."));
+        AddEvent(new LocalEventsModel(4, "Food Truck Rally", DateTime.Now.AddDays(2), "Food", true, 1, $"{imageFolderPath}4.jpeg", "Enjoy diverse food options from the best food trucks in town."));
+        AddEvent(new LocalEventsModel(5, "Tech Conference", DateTime.Now.AddDays(10), "Technology", false, 2, $"{imageFolderPath}5.jpg", "A conference for tech enthusiasts to network and learn."));
+        AddEvent(new LocalEventsModel(6, "Marathon", DateTime.Now.AddDays(15), "Sports", true, 1, $"{imageFolderPath}6.jpeg", "A challenging marathon for runners of all skill levels."));
+        AddEvent(new LocalEventsModel(7, "Jazz Night", DateTime.Now.AddDays(8), "Music", false, 2, $"{imageFolderPath}7.png", "An evening of smooth jazz and great company."));
+        AddEvent(new LocalEventsModel(8, "Literature Fair", DateTime.Now.AddDays(12), "Literature", true, 3, $"{imageFolderPath}8.jpg", "Celebrate literature with authors, readings, and workshops."));
+        AddEvent(new LocalEventsModel(9, "Photography Workshop", DateTime.Now.AddDays(9), "Art", false, 1, $"{imageFolderPath}9.jpg", "Learn photography skills from seasoned professionals."));
+        AddEvent(new LocalEventsModel(10, "Yoga Retreat", DateTime.Now.AddDays(4), "Health", true, 2, $"{imageFolderPath}10.jpg", "Relax and rejuvenate at a peaceful yoga retreat."));
+        AddEvent(new LocalEventsModel(11, "Film Festival", DateTime.Now.AddDays(6), "Film", false, 2, $"{imageFolderPath}11.jpeg", "Experience the best of international and local cinema."));
+        AddEvent(new LocalEventsModel(12, "Stand-up Comedy", DateTime.Now.AddDays(1), "Comedy", true, 1, $"{imageFolderPath}12.jpg", "Enjoy a night of laughter with top comedians."));
 
         // Announcements
         AddAnnouncement(new AnnouncementModel(1, "Water Cut Announcement", "There will be a water cut in your area.", "Water Announcement", DateTime.Now, true, 1));
@@ -320,5 +323,18 @@ public class LocalEventsViewModel : BaseViewModel
         AddAnnouncement(new AnnouncementModel(9, "Local Election", "Upcoming local election details.", "Politics", DateTime.Now.AddDays(10), true, 2));
         AddAnnouncement(new AnnouncementModel(10, "New Park Inauguration", "A new park is opening in your town.", "Community", DateTime.Now.AddDays(3), false, 3));
     }
+
+    private LocalEventsModel _selectedEvent;
+    public LocalEventsModel SelectedEvent
+    {
+        get => _selectedEvent;
+        set
+        {
+            _selectedEvent = value;
+            OnPropertyChanged(nameof(SelectedEvent));
+        }
+    }
+
+
 
 }
