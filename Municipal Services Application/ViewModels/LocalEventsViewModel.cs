@@ -33,8 +33,33 @@ public class LocalEventsViewModel : BaseViewModel
     public ObservableCollection<AnnouncementModel> Announcements { get; set; }
     public ObservableCollection<RecommendedEventsModel> RecommendedEvents { get; set; }  // For recommendations
 
-    // Command for search functionality
+    // Commands for interaction
     public ICommand SearchCommand { get; private set; }
+    public ICommand CloseEventDetailsCommand { get; private set; } // Added command to close the pop-up
+
+    private LocalEventsModel _selectedEvent;
+    public LocalEventsModel SelectedEvent
+    {
+        get => _selectedEvent;
+        set
+        {
+            _selectedEvent = value;
+            OnPropertyChanged(nameof(SelectedEvent));
+        }
+    }
+
+    private RecommendedEventsModel _selectedRecommendedEvent;
+    public RecommendedEventsModel SelectedRecommendedEvent
+    {
+        get => _selectedRecommendedEvent;
+        set
+        {
+            _selectedRecommendedEvent = value;
+            OnPropertyChanged(nameof(SelectedRecommendedEvent));
+        }
+    }
+
+    public ICommand CloseRecommendedEventDetailsCommand { get; private set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LocalEventsViewModel"/> class.
@@ -57,9 +82,25 @@ public class LocalEventsViewModel : BaseViewModel
         RecommendedEvents = new ObservableCollection<RecommendedEventsModel>();  // For recommendations
 
         SearchCommand = new RelayCommand(Search);
+        CloseEventDetailsCommand = new RelayCommand(CloseEventDetails); // Initialize close command
+        CloseRecommendedEventDetailsCommand = new RelayCommand(CloseRecommendedEventDetails);
 
         LoadDummyData();  // Load dummy data for testing
     }
+
+    /// <summary>
+    /// Closes the event details pop-up by clearing the selected event.
+    /// </summary>
+    private void CloseEventDetails()
+    {
+        SelectedEvent = null; // Hide the pop-up
+    }
+
+    private void CloseRecommendedEventDetails()
+    {
+        SelectedRecommendedEvent = null;
+    }
+
 
     /// <summary>
     /// Adds a new event to the event queue and relevant sets.
@@ -178,9 +219,10 @@ public class LocalEventsViewModel : BaseViewModel
         else
         {
             var newRecommendedEvent = new RecommendedEventsModel(
-                eventItem.Id, eventItem.EventName, eventItem.EventDate,
+                eventItem.Id,
+                eventItem.EventName, eventItem.EventDate,
                 eventItem.Category, eventItem.IsUrgent, eventItem.Priority,
-                eventItem.SearchCounter);
+                eventItem.SearchCounter, eventItem.ImagePath);
 
             _recommendedEventsDictionary.Add(newRecommendedEvent.Id, newRecommendedEvent);
         }
@@ -323,18 +365,4 @@ public class LocalEventsViewModel : BaseViewModel
         AddAnnouncement(new AnnouncementModel(9, "Local Election", "Upcoming local election details.", "Politics", DateTime.Now.AddDays(10), true, 2));
         AddAnnouncement(new AnnouncementModel(10, "New Park Inauguration", "A new park is opening in your town.", "Community", DateTime.Now.AddDays(3), false, 3));
     }
-
-    private LocalEventsModel _selectedEvent;
-    public LocalEventsModel SelectedEvent
-    {
-        get => _selectedEvent;
-        set
-        {
-            _selectedEvent = value;
-            OnPropertyChanged(nameof(SelectedEvent));
-        }
-    }
-
-
-
 }

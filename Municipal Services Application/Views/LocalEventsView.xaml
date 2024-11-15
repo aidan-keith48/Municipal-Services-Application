@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Municipal_Services_Application.Views"
     xmlns:helpers="clr-namespace:Municipal_Services_Application.Helpers"
+    xmlns:local="clr-namespace:Municipal_Services_Application.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -23,48 +23,48 @@
         </Grid.ColumnDefinitions>
 
         <TabControl Margin="10,10,10,10">
-            <!-- Events Tab -->
+            <!--  Events Tab  -->
             <TabItem Header="Local Events">
                 <Grid>
-                    <!-- ListBox of Events -->
+                    <!--  ListBox of Events  -->
                     <ListBox
-                Margin="0,10,0,0"
-                ItemsSource="{Binding Events}"
-                SelectedItem="{Binding SelectedEvent}">
+                        Margin="0,10,0,0"
+                        ItemsSource="{Binding Events}"
+                        SelectedItem="{Binding SelectedEvent}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border
-                            Margin="10,5,10,5"
-                            Padding="10"
-                            Background="#f9f9f9"
-                            BorderBrush="LightGray"
-                            BorderThickness="1"
-                            CornerRadius="10">
+                                    Margin="10,5,10,5"
+                                    Padding="10"
+                                    Background="#f9f9f9"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
                                     <StackPanel Orientation="Horizontal">
-                                        <!-- Display Image Thumbnail -->
+                                        <!--  Display Image Thumbnail  -->
                                         <Image
-                                    Width="50"
-                                    Height="50"
-                                    Margin="0,0,10,0"
-                                    Source="{Binding ImagePath}" />
+                                            Width="50"
+                                            Height="50"
+                                            Margin="0,0,10,0"
+                                            Source="{Binding ImagePath}" />
                                         <StackPanel>
                                             <TextBlock
-                                        FontSize="16"
-                                        FontWeight="Bold"
-                                        Foreground="#333"
-                                        Text="{Binding EventName}" />
+                                                FontSize="16"
+                                                FontWeight="Bold"
+                                                Foreground="#333"
+                                                Text="{Binding EventName}" />
                                             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                                 <TextBlock
-                                            FontWeight="Bold"
-                                            Foreground="#444"
-                                            Text="Date: " />
+                                                    FontWeight="Bold"
+                                                    Foreground="#444"
+                                                    Text="Date: " />
                                                 <TextBlock Foreground="#666" Text="{Binding EventDate}" />
                                             </StackPanel>
                                             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                                 <TextBlock
-                                            FontWeight="Bold"
-                                            Foreground="#444"
-                                            Text="Category: " />
+                                                    FontWeight="Bold"
+                                                    Foreground="#444"
+                                                    Text="Category: " />
                                                 <TextBlock Foreground="#666" Text="{Binding Category}" />
                                             </StackPanel>
                                         </StackPanel>
@@ -74,78 +74,103 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <!-- Detailed Event View Pop-Up Card -->
+                    <!--  Detailed Event View Pop-Up Card  -->
                     <Border
-                Grid.RowSpan="2"
-                Background="White"
-                BorderBrush="Gray"
-                BorderThickness="1"
-                CornerRadius="10"
-                Padding="20"
-                Margin="10"
-                Visibility="{Binding SelectedEvent, Converter={StaticResource NullToVisibilityConverter}}">
+                        Grid.RowSpan="2"
+                        Width="400"
+                        Height="300"
+                        Margin="20,50,20,50"
+                        Padding="20"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="White"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Visibility="{Binding SelectedEvent, Converter={StaticResource NullToVisibilityConverter}}">
                         <StackPanel>
-                            <!-- Image -->
+                            <!--  Close Button  -->
+                            <Button
+                                Width="75"
+                                Margin="0,0,0,10"
+                                HorizontalAlignment="Right"
+                                Command="{Binding CloseEventDetailsCommand}"
+                                Content="Close" />
+
+                            <!--  Image  -->
                             <Image
-                        Width="200"
-                        Height="150"
-                        Source="{Binding SelectedEvent.ImagePath}" />
-                            <!-- Details -->
+                                Width="150"
+                                Height="100"
+                                Margin="0,0,0,10"
+                                Source="{Binding SelectedEvent.ImagePath}"
+                                Stretch="UniformToFill" />
+
+                            <!--  Event Details  -->
                             <TextBlock
-                        FontSize="20"
-                        FontWeight="Bold"
-                        Text="{Binding SelectedEvent.EventName}" />
-                            <TextBlock Text="{Binding SelectedEvent.EventDate}" />
-                            <TextBlock Text="{Binding SelectedEvent.Category}" />
+                                Margin="0,5,0,0"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Text="{Binding SelectedEvent.EventName}" />
                             <TextBlock
-                        Margin="0,10,0,0"
-                        Text="{Binding SelectedEvent.Description}" />
+                                Margin="0,5,0,0"
+                                FontSize="14"
+                                Text="{Binding SelectedEvent.EventDate}" />
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                FontSize="14"
+                                Text="{Binding SelectedEvent.Category}" />
+                            <TextBlock
+                                Margin="0,10,0,0"
+                                FontSize="12"
+                                Text="{Binding SelectedEvent.Description}"
+                                TextWrapping="Wrap" />
                         </StackPanel>
                     </Border>
+
                 </Grid>
             </TabItem>
 
-            <!-- Announcements Tab -->
+            <!--  Announcements Tab  -->
             <TabItem Header="Announcements">
                 <ListBox
-            Margin="0,10,0,0"
-            d:ItemsSource="{d:SampleData ItemCount=5}"
-            ItemsSource="{Binding Announcements}">
+                    Margin="0,10,0,0"
+                    d:ItemsSource="{d:SampleData ItemCount=5}"
+                    ItemsSource="{Binding Announcements}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border
-                        Margin="10,5,10,5"
-                        Padding="10"
-                        Background="#f9f9f9"
-                        BorderBrush="LightGray"
-                        BorderThickness="1"
-                        CornerRadius="10">
+                                Margin="10,5,10,5"
+                                Padding="10"
+                                Background="#f9f9f9"
+                                BorderBrush="LightGray"
+                                BorderThickness="1"
+                                CornerRadius="10">
                                 <StackPanel>
                                     <TextBlock
-                                FontSize="16"
-                                FontWeight="Bold"
-                                Foreground="#333"
-                                Text="{Binding AnnouncementTitle}" />
+                                        FontSize="16"
+                                        FontWeight="Bold"
+                                        Foreground="#333"
+                                        Text="{Binding AnnouncementTitle}" />
                                     <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                         <TextBlock
-                                    FontWeight="Bold"
-                                    Foreground="#444"
-                                    Text="Date: " />
+                                            FontWeight="Bold"
+                                            Foreground="#444"
+                                            Text="Date: " />
                                         <TextBlock Foreground="#666" Text="{Binding AnnouncementDate}" />
                                     </StackPanel>
                                     <TextBlock
-                                Foreground="#666"
-                                Text="{Binding AnnouncementContent}"
-                                TextWrapping="Wrap" />
+                                        Foreground="#666"
+                                        Text="{Binding AnnouncementContent}"
+                                        TextWrapping="Wrap" />
                                     <TextBlock
-                                Foreground="#666"
-                                Text="{Binding AnnouncementCategory}"
-                                TextWrapping="Wrap" />
+                                        Foreground="#666"
+                                        Text="{Binding AnnouncementCategory}"
+                                        TextWrapping="Wrap" />
                                     <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                                         <TextBlock
-                                    FontWeight="Bold"
-                                    Foreground="#444"
-                                    Text="Category: " />
+                                            FontWeight="Bold"
+                                            Foreground="#444"
+                                            Text="Category: " />
                                         <TextBlock Foreground="#666" Text="{Binding AnnouncementCategory}" />
                                     </StackPanel>
                                 </StackPanel>
@@ -155,40 +180,100 @@
                 </ListBox>
             </TabItem>
 
-            <!-- Recommended Events Tab -->
             <TabItem Header="Recommended Events">
-                <ListBox
-            Margin="0,10,0,0"
-            d:ItemsSource="{d:SampleData ItemCount=5}"
-            ItemsSource="{Binding RecommendedEvents}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border
-                        Margin="10,5,10,5"
-                        Padding="10"
-                        Background="#f9f9f9"
-                        BorderBrush="LightGray"
+                <Grid>
+                    <!--  ListBox for Recommended Events  -->
+                    <ListBox
+                        Margin="0,10,0,0"
+                        ItemsSource="{Binding RecommendedEvents}"
+                        SelectedItem="{Binding SelectedRecommendedEvent}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="10,5,10,5"
+                                    Padding="10"
+                                    Background="#f9f9f9"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--  Event Image  -->
+                                        <Image
+                                            Width="80"
+                                            Height="60"
+                                            Margin="0,0,10,0"
+                                            Source="{Binding ImagePath}"
+                                            Stretch="UniformToFill" />
+
+                                        <!--  Event Details  -->
+                                        <StackPanel>
+                                            <TextBlock
+                                                FontSize="16"
+                                                FontWeight="Bold"
+                                                Foreground="#333"
+                                                Text="{Binding EventName}" />
+                                            <TextBlock Foreground="#666" Text="{Binding EventDate}" />
+                                            <TextBlock Foreground="#666" Text="{Binding Category}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock
+                                                    FontWeight="Bold"
+                                                    Foreground="#444"
+                                                    Text="Searches: " />
+                                                <TextBlock Foreground="#666" Text="{Binding SearchCounter}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!--  Detailed Recommended Event View  -->
+                    <Border
+                        Grid.RowSpan="2"
+                        Width="400"
+                        Height="300"
+                        Margin="20"
+                        Padding="15"
+                        Background="White"
+                        BorderBrush="Gray"
                         BorderThickness="1"
-                        CornerRadius="10">
-                                <StackPanel>
-                                    <TextBlock
-                                FontSize="16"
+                        CornerRadius="10"
+                        Visibility="{Binding SelectedRecommendedEvent, Converter={StaticResource NullToVisibilityConverter}}">
+                        <StackPanel>
+                            <!--  Close Button  -->
+                            <Button
+                                Width="75"
+                                Height="30"
+                                HorizontalAlignment="Right"
+                                Command="{Binding CloseRecommendedEventDetailsCommand}"
+                                Content="Close" />
+
+                            <!--  Image  -->
+                            <Image
+                                Width="150"
+                                Height="120"
+                                Margin="0,10,0,10"
+                                Source="{Binding SelectedRecommendedEvent.ImagePath}"
+                                Stretch="UniformToFill" />
+
+                            <!--  Details  -->
+                            <TextBlock
+                                FontSize="18"
                                 FontWeight="Bold"
-                                Foreground="#333"
-                                Text="{Binding EventName}" />
-                                    <TextBlock Foreground="#666" Text="{Binding EventDate}" />
-                                    <TextBlock Foreground="#666" Text="{Binding Category}" />
-                                    <TextBlock
-                                FontWeight="Bold"
-                                Foreground="#444"
-                                Text="Searches: " />
-                                    <TextBlock Foreground="#666" Text="{Binding SearchCounter}" />
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                                Text="{Binding SelectedRecommendedEvent.EventName}" />
+                            <TextBlock Text="{Binding SelectedRecommendedEvent.EventDate}" />
+                            <TextBlock Text="{Binding SelectedRecommendedEvent.Category}" />
+                            <TextBlock
+                                Margin="0,10,0,0"
+                                Text="{Binding SelectedRecommendedEvent.Description}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </TabItem>
+
+
         </TabControl>
 
 
