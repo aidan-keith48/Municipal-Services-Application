@@ -72,15 +72,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data Structures\BinarySearchTree.cs" />
+    <Compile Include="Data Structures\Graph.cs" />
+    <Compile Include="Data Structures\MaxHeap.cs" />
     <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Model\AnnouncementModel.cs" />
     <Compile Include="Model\RecommenedEventsModel.cs" />
     <Compile Include="Model\LocalEventsModel.cs" />
+    <Compile Include="Model\ServiceRequest.cs" />
+    <Compile Include="Repositories\ServiceRequestRepository.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\IssueListViewModel.cs" />
     <Compile Include="ViewModels\LocalEventsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportIssueViewModel.cs" />
+    <Compile Include="ViewModels\ServiceRequestStatusViewModel.cs" />
     <Compile Include="Views\IssueListView.xaml.cs">
       <DependentUpon>IssueListView.xaml</DependentUpon>
     </Compile>

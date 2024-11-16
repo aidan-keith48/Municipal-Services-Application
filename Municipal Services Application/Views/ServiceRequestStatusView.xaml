@@ -3,18 +3,274 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Municipal_Services_Application.Views"
+    xmlns:helpers="clr-namespace:Municipal_Services_Application.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Municipal_Services_Application.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
-        <TextBox
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="24"
-            FontWeight="Bold"
-            Text="Coming Soon Service request" />
 
+    <UserControl.Resources>
+        <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <helpers:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid Margin="20" Background="#F8F9FA">
+        <!--  Header Section  -->
+        <StackPanel Margin="0,0,0,20" VerticalAlignment="Top">
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="24"
+                FontWeight="Bold"
+                Foreground="#333333"
+                Text="Service Request Status" />
+            <TextBlock
+                Margin="0,5,0,0"
+                HorizontalAlignment="Center"
+                FontSize="14"
+                Foreground="#666666"
+                Text="Track and manage your submitted service requests below." />
+        </StackPanel>
+
+        <!--  Tab Control  -->
+        <TabControl Margin="0,60,0,0">
+            <!--  Tab for All Requests  -->
+            <TabItem Header="All Requests">
+                <Grid>
+                    <!--  Define Rows  -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!--  Search Bar  -->
+                    <DockPanel Grid.Row="0" Margin="10">
+                        <Grid
+                            Width="400"
+                            Height="35"
+                            Margin="0,0,10,0"
+                            DockPanel.Dock="Left">
+                            <TextBox
+                                Name="AllRequestsSearchTextBox"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Foreground="#CCCCCC"
+                                IsHitTestVisible="False"
+                                Text="Search all requests..."
+                                Visibility="{Binding Text, ElementName=AllRequestsSearchTextBox, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                        </Grid>
+                        <Button
+                            Width="80"
+                            Height="35"
+                            Background="#007BFF"
+                            BorderBrush="#007BFF"
+                            BorderThickness="1"
+                            Command="{Binding SearchCommand}"
+                            Content="Search"
+                            Cursor="Hand"
+                            DockPanel.Dock="Right"
+                            FontSize="14"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </DockPanel>
+
+                    <!--  DataGrid  -->
+                    <DataGrid
+                        Grid.Row="1"
+                        Margin="10"
+                        AutoGenerateColumns="False"
+                        Background="White"
+                        BorderBrush="#CCCCCC"
+                        BorderThickness="1"
+                        CanUserAddRows="False"
+                        ColumnHeaderHeight="40"
+                        Foreground="#333333"
+                        GridLinesVisibility="Horizontal"
+                        ItemsSource="{Binding ServiceRequests}"
+                        RowHeight="40">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="100"
+                                Binding="{Binding RequestId}"
+                                Header="Request ID" />
+                            <DataGridTextColumn
+                                Width="180"
+                                Binding="{Binding Title}"
+                                Header="Title" />
+                            <DataGridTextColumn
+                                Width="100"
+                                Binding="{Binding Status}"
+                                Header="Status" />
+                            <DataGridTextColumn
+                                Width="150"
+                                Binding="{Binding DateSubmitted}"
+                                Header="Date Submitted" />
+                            <DataGridTemplateColumn Width="180" Header="Progress">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ProgressBar
+                                            Height="20"
+                                            Margin="5,0"
+                                            Maximum="100"
+                                            Minimum="0"
+                                            Value="{Binding Progress}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="120" Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Width="100"
+                                            Height="30"
+                                            Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Content="View Details" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!--  Tab for Prioritized Requests  -->
+            <TabItem Header="Prioritized Requests">
+                <Grid>
+                    <!--  Define Rows  -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!--  Search Bar  -->
+                    <DockPanel Grid.Row="0" Margin="10">
+                        <Grid
+                            Width="400"
+                            Height="35"
+                            Margin="0,0,10,0"
+                            DockPanel.Dock="Left">
+                            <TextBox
+                                Name="PrioritizedSearchTextBox"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Text="{Binding PrioritizedSearchText, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="16"
+                                Foreground="#CCCCCC"
+                                IsHitTestVisible="False"
+                                Text="Search prioritized requests..."
+                                Visibility="{Binding Text, ElementName=PrioritizedSearchTextBox, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
+                        </Grid>
+                        <Button
+                            Width="80"
+                            Height="35"
+                            Background="#007BFF"
+                            BorderBrush="#007BFF"
+                            BorderThickness="1"
+                            Command="{Binding PrioritizedSearchCommand}"
+                            Content="Search"
+                            Cursor="Hand"
+                            DockPanel.Dock="Right"
+                            FontSize="14"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </DockPanel>
+
+                    <!--  DataGrid  -->
+                    <DataGrid
+                        Grid.Row="1"
+                        Margin="10"
+                        AutoGenerateColumns="False"
+                        Background="White"
+                        BorderBrush="#CCCCCC"
+                        BorderThickness="1"
+                        CanUserAddRows="False"
+                        ColumnHeaderHeight="40"
+                        Foreground="#333333"
+                        GridLinesVisibility="Horizontal"
+                        ItemsSource="{Binding PrioritizedRequests}"
+                        RowHeight="40">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="100"
+                                Binding="{Binding RequestId}"
+                                Header="Request ID" />
+                            <DataGridTextColumn
+                                Width="180"
+                                Binding="{Binding Title}"
+                                Header="Title" />
+                            <DataGridTextColumn
+                                Width="100"
+                                Binding="{Binding Status}"
+                                Header="Status" />
+                            <DataGridTextColumn
+                                Width="150"
+                                Binding="{Binding DateSubmitted}"
+                                Header="Date Submitted" />
+                            <DataGridTextColumn
+                                Width="100"
+                                Binding="{Binding Priority}"
+                                Header="Priority" />
+                            <DataGridTemplateColumn Width="120" Header="Actions">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            Width="100"
+                                            Height="30"
+                                            Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Content="View Details" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+
+        </TabControl>
     </Grid>
 </UserControl>

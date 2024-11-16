@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Municipal_Services_Application.Repositories;
+using Municipal_Services_Application.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,9 @@ namespace Municipal_Services_Application.Views
         public ServiceRequestStatus()
         {
             InitializeComponent();
+            // Set the DataContext to the ViewModel
+            var repository = new ServiceRequestRepository(); // Create an instance of the repository
+            DataContext = new ServiceRequestStatusViewModel(repository); // Pass the repository to the ViewModel
         }
     }
 }
