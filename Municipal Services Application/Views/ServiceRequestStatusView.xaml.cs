@@ -29,5 +29,10 @@ namespace Municipal_Services_Application.Views
             var repository = new ServiceRequestRepository(); // Create an instance of the repository
             DataContext = new ServiceRequestStatusViewModel(repository); // Pass the repository to the ViewModel
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
