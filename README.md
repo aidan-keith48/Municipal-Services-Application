@@ -112,6 +112,18 @@ This combination of technologies and data structures ensures the application is 
    - Use the search functionality to filter events based on categories and dates.
    - View recommended events that match your search patterns.
 
+###4. **Service Request Management:
+    Navigate to the "Service Request Status" tab to view, create, or manage service requests.
+    View Requests:
+    All service requests are displayed in a DataGrid with columns like Request ID, Title, Status, Priority, and Progress.
+    Search Requests:
+    Use the "Search BST" functionality to search for a specific request by its ID. The Binary Search Tree ensures efficient and fast lookups.
+    Create New Requests:
+    Fill in the required fields: Title, Status, Priority, and Dependencies.
+    Newly created requests are added to the Max Heap for prioritization and the BST for fast retrieval.
+    Manage Dependencies:
+    The "Request Dependencies" tab allows you to visualize dependencies using a Graph. Use the TreeView to explore the hierarchical relationships between tasks.
+
 ---
 
 ## Data Structures in Detail
