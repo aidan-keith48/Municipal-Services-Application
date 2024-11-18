@@ -38,6 +38,10 @@
             <!--  Tab for All Requests  -->
             <TabItem Header="All Requests">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="197*" />
+                        <ColumnDefinition Width="557*" />
+                    </Grid.ColumnDefinitions>
                     <!--  Define Rows  -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -48,32 +52,58 @@
                         <!--  DataGrid Section  -->
                     </Grid.RowDefinitions>
 
-                    <!--  Dynamic Search Bar (Filtering)  -->
-                    <DockPanel Grid.Row="0" Margin="10">
-                        <Grid
-                            Width="400"
+                    <!--  Search Bar Section  -->
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,10"
+                        HorizontalAlignment="Left"
+                        Orientation="Horizontal">
+                        <TextBox
+                            Name="AllRequestsSearchTextBox"
+                            Width="300"
                             Height="35"
-                            Margin="0,0,10,0"
-                            DockPanel.Dock="Left">
-                            <TextBox
-                                Name="AllRequestsSearchTextBox"
-                                VerticalAlignment="Center"
-                                FontSize="16"
-                                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBlock
-                                Margin="5,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="16"
-                                Foreground="#CCCCCC"
-                                IsHitTestVisible="False"
-                                Text="Filter requests dynamically..."
-                                Visibility="{Binding Text, ElementName=AllRequestsSearchTextBox, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
-                        </Grid>
-                    </DockPanel>
+                            Margin="10,10,10,0"
+                            Padding="5"
+                            Background="#F1F3F5"
+                            BorderBrush="#E2E8F0"
+                            BorderThickness="1"
+                            FontSize="14"
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button
+                            Width="100"
+                            Height="35"
+                            Margin="10,10,10,0"
+                            Background="#3B82F6"
+                            BorderBrush="#3B82F6"
+                            BorderThickness="1"
+                            Command="{Binding SearchCommand}"
+                            Content="Generic Search"
+                            FontSize="14"
+                            Foreground="White">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
 
                     <!--  BST Search Section  -->
                     <StackPanel
                         Grid.Row="1"
+                        Grid.ColumnSpan="2"
                         Margin="10,0,0,10"
                         HorizontalAlignment="Left"
                         Orientation="Horizontal">
@@ -87,14 +117,15 @@
                             Height="30"
                             Margin="10,0,0,0"
                             Command="{Binding SearchCommand}"
-                            Content="Search BST"
+                            Content="Fast Search"
                             ToolTip="Search for a specific Request ID using Binary Search Tree (BST)" />
                     </StackPanel>
 
                     <!--  DataGrid Section  -->
                     <DataGrid
                         Grid.Row="2"
-                        Margin="10"
+                        Grid.ColumnSpan="2"
+                        Margin="10,10,10,10"
                         AutoGenerateColumns="False"
                         Background="White"
                         BorderBrush="#CCCCCC"
@@ -205,11 +236,13 @@
                             FontSize="16"
                             Text="{Binding NewRequestDependencies, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock
-                            Margin="5,0,0,0"
+                            Width="200"
+                            Margin="-500,0,0,0"
                             VerticalAlignment="Center"
                             Foreground="Gray"
                             IsHitTestVisible="False"
-                            Text="Enter Dependencies (comma-separated IDs)"
+                            Text="Enter Dependencies                              (comma-separated IDs)"
+                            TextWrapping="Wrap"
                             Visibility="{Binding NewRequestDependencies, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                     </Grid>
 
@@ -228,7 +261,6 @@
             </TabItem>
 
 
-            <!--  Tab for Prioritized Requests  -->
             <TabItem Header="Prioritized Requests">
                 <Grid>
                     <!--  Define Rows  -->
@@ -246,25 +278,29 @@
                             DockPanel.Dock="Left">
                             <TextBox
                                 Name="PrioritizedSearchTextBox"
+                                Padding="5,0"
                                 VerticalAlignment="Center"
+                                Background="White"
+                                BorderBrush="#CCCCCC"
+                                BorderThickness="1"
                                 FontSize="16"
                                 Text="{Binding PrioritizedSearchText, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Center"
-                                FontSize="16"
-                                Foreground="#CCCCCC"
+                                FontSize="14"
+                                Foreground="#AAAAAA"
                                 IsHitTestVisible="False"
                                 Text="Search prioritized requests..."
                                 Visibility="{Binding Text, ElementName=PrioritizedSearchTextBox, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                         </Grid>
                         <Button
-                            Width="80"
+                            Width="100"
                             Height="35"
                             Background="#007BFF"
                             BorderBrush="#007BFF"
                             BorderThickness="1"
-                            Command="{Binding PrioritizedSearchCommand}"
+                            Command="{Binding SearchCommand}"
                             Content="Search"
                             Cursor="Hand"
                             DockPanel.Dock="Right"
@@ -342,19 +378,24 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Request Dependencies">
+
+            <TabItem Header="Related Requests">
                 <StackPanel Margin="10">
-                    <!--  TextBox with Placeholder  -->
-                    <Grid>
+                    <!--  TextBox for Request ID Input  -->
+                    <Grid Margin="0,0,0,10">
                         <TextBox
                             Width="300"
-                            Height="30"
-                            FontSize="16"
+                            Height="35"
+                            Padding="5"
+                            Background="#F1F3F5"
+                            BorderBrush="#D1D5DB"
+                            BorderThickness="1"
+                            FontSize="14"
                             Text="{Binding SelectedRequestId, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
-                            Foreground="Gray"
+                            Foreground="#9CA3AF"
                             IsHitTestVisible="False"
                             Text="Enter Request ID to Load Dependencies"
                             Visibility="{Binding SelectedRequestId, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
@@ -363,16 +404,54 @@
                     <!--  Load Button  -->
                     <Button
                         Width="100"
-                        Height="30"
-                        Margin="0,10"
+                        Height="35"
+                        Margin="0,0,0,10"
+                        Background="#3B82F6"
+                        BorderBrush="#3B82F6"
+                        BorderThickness="1"
                         Command="{Binding LoadDependenciesCommand}"
-                        Content="Load" />
+                        Content="Load"
+                        FontSize="14"
+                        Foreground="White">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
-                    <!--  TreeView to Display Dependencies  -->
-                    <TreeView ItemsSource="{Binding DependencyRequests}">
+                    <!--  TreeView for Dependencies  -->
+                    <TreeView
+                        Margin="0,0,0,10"
+                        Background="White"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="1"
+                        ItemsSource="{Binding DependencyRequests}">
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate>
-                                <TextBlock Text="{Binding Title}" />
+                            <HierarchicalDataTemplate ItemsSource="{Binding Dependencies}">
+                                <StackPanel Margin="5" Orientation="Horizontal">
+                                    <!--  Optional Icon  -->
+                                    <Image
+                                        Width="16"
+                                        Height="16"
+                                        Margin="0,0,5,0"
+                                        Source="/Images/icon-node.png" />
+                                    <TextBlock
+                                        FontSize="14"
+                                        Foreground="#374151"
+                                        Text="{Binding Title}" />
+                                </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
@@ -380,11 +459,14 @@
                     <!--  TextBlock for Empty State  -->
                     <TextBlock
                         HorizontalAlignment="Center"
-                        Foreground="Gray"
+                        FontSize="14"
+                        FontStyle="Italic"
+                        Foreground="#9CA3AF"
                         Text="No dependencies to display."
                         Visibility="{Binding DependencyRequests.Count, Converter={StaticResource NullOrEmptyToVisibilityConverter}}" />
                 </StackPanel>
             </TabItem>
+
         </TabControl>
     </Grid>
 </UserControl>

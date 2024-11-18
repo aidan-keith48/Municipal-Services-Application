@@ -3,53 +3,91 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Municipal_Services_Application.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Background="Gray"
+    Background="#F3F4F6"
     mc:Ignorable="d">
 
-    <!--  This UserControl represents the view for reporting issues in the Municipal Services Application.  -->
+    <Grid Margin="20">
+        <!--  Outer Border for Card-Like Design  -->
+        <Border
+            Padding="20"
+            Background="White"
+            BorderBrush="#E5E7EB"
+            BorderThickness="1"
+            CornerRadius="10">
+            <StackPanel Margin="10">
+                <!--  Title  -->
+                <TextBlock
+                    Margin="0,0,0,20"
+                    HorizontalAlignment="Center"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="#333"
+                    Text="Report an Issue" />
 
-    <Grid>
-        <StackPanel Margin="10">
-            <!--  Label for the location input field  -->
-            <Label Content="Location:" />
-            <!--  TextBox for entering the location of the issue  -->
-            <TextBox Style="{StaticResource RoundedTextBox}" Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
+                <!--  Location  -->
+                <TextBlock
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Foreground="#555"
+                    Text="Location" />
+                <TextBox
+                    Height="35"
+                    Padding="5"
+                    Background="#F9FAFB"
+                    FontSize="14"
+                    Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}" />
 
-            <!--  Label for the category selection field  -->
-            <Label Content="Category:" />
-            <!--  ComboBox for selecting the category of the issue  -->
-            <ComboBox
-                Height="25"
-                Margin="0,0,0,10"
-                ItemsSource="{Binding Categories}"
-                SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}" />
+                <!--  Category  -->
+                <TextBlock
+                    Margin="0,10,0,0"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Foreground="#555"
+                    Text="Category" />
+                <ComboBox
+                    Height="35"
+                    Padding="5"
+                    Background="#F9FAFB"
+                    FontSize="14"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}" />
 
-            <!--  Label for the description input field  -->
-            <Label Content="Description:" />
-            <!--  TextBox for entering the description of the issue  -->
-            <TextBox
-                MinHeight="100"
-                Margin="0,0,0,10"
-                Style="{StaticResource RoundedTextBox}"
-                Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                TextWrapping="Wrap" />
+                <!--  Description  -->
+                <TextBlock
+                    Margin="0,10,0,0"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Foreground="#555"
+                    Text="Description" />
+                <TextBox
+                    MinHeight="100"
+                    Padding="10"
+                    Background="#F9FAFB"
+                    FontSize="14"
+                    Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                    TextWrapping="Wrap" />
 
-            <!--  Button for attaching an image to the issue report  -->
-            <Button
-                Margin="0,0,0,10"
-                Command="{Binding AttachFileCommand}"
-                Content="Attach File"
-                Style="{StaticResource RoundedButton}" />
+                <!--  Attach File  -->
+                <Button
+                    Height="40"
+                    Margin="0,10,0,0"
+                    Background="#E5E7EB"
+                    Command="{Binding AttachFileCommand}"
+                    Content="Attach File"
+                    Foreground="#333" />
 
-            <!--  Button for submitting the issue report  -->
-            <Button
-                Margin="0,0,0,10"
-                Command="{Binding SubmitCommand}"
-                Content="Submit Report"
-                Style="{StaticResource RoundedButton}" />
-
-        </StackPanel>
+                <!--  Submit Report  -->
+                <Button
+                    Height="45"
+                    Margin="0,10,0,0"
+                    Background="#3B82F6"
+                    Command="{Binding SubmitCommand}"
+                    Content="Submit Report"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="White" />
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>
