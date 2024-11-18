@@ -149,6 +149,20 @@ namespace Municipal_Services_Application.Repositories
             _serviceRequests.Add(new ServiceRequest(48, "Public Park Maintenance", "Completed", DateTime.Now.AddDays(-48), 100, 48, null));
             _serviceRequests.Add(new ServiceRequest(49, "Public Park Pathway Repair", "Pending", DateTime.Now.AddDays(-49), 100, 49, null));
             _serviceRequests.Add(new ServiceRequest(50, "Public Park Playground Repair", "In Progress", DateTime.Now.AddDays(-50), 100, 50, null));
+
+            // Add 100 more dummy service requests
+            for (int i = 51; i <= 150; i++)
+            {
+                _serviceRequests.Add(new ServiceRequest(
+                    i,
+                    $"Service Request #{i}",
+                    i % 3 == 0 ? "Completed" : (i % 3 == 1 ? "Pending" : "In Progress"),
+                    DateTime.Now.AddDays(-i), // Simulating different submission dates
+                    i % 101, // Progress in range 0-100
+                    i % 5 + 1, // Priority (1-5)
+                    i % 2 == 0 ? new List<int> { i - 1 } : null // Add dependency to the previous request for every second request
+                ));
+            }
         }
         //----------------------------------------------------------------------------------
 
