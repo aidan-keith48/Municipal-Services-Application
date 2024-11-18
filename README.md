@@ -125,69 +125,177 @@ This combination of technologies and data structures ensures the application is 
     The "Request Dependencies" tab allows you to visualize dependencies using a Graph. Use the TreeView to explore the hierarchical relationships between tasks.
 
 ---
-
 ## Data Structures in Detail
 
-The application leverages several advanced data structures to efficiently manage service requests, prioritize tasks, and handle dependencies. Each data structure plays a critical role in optimizing the performance and usability of the application.
+The application leverages advanced data structures to efficiently manage service requests, prioritize tasks, and handle dependencies. Below is an in-depth look at each data structure, its role in the application, and how it is implemented and integrated.
+
+---
 
 ### 1. **Binary Search Tree (BST)**
 
 #### **Role**:
-- Stores service requests, enabling efficient searching, insertion, and deletion operations.
-- Specifically used to quickly search for a request by its unique ID, improving the performance of the "Search BST" functionality.
+- The Binary Search Tree (BST) is used to store and retrieve service requests based on their unique `RequestId`.
+- It optimizes search operations, making the "Search BST" functionality efficient.
+
+#### **Implementation**:
+- The `BinarySearchTree` class is initialized during the repository setup in the `InitializeBST` method.
+- All existing service requests are inserted into the BST when initialized.
+- When a new service request is added, it is also inserted into the BST (`_bst.Insert(request)`).
+
+#### **Integration**:
+- **Repository Integration**:
+  - The BST is updated during the `AddServiceRequest` method, ensuring the new request is searchable immediately.
+  - The `SearchInBST(int requestId)` method in the repository performs a direct search in the BST.
+- **ViewModel Integration**:
+  - The `SearchUsingBST` command in the `ServiceRequestStatusViewModel` uses the repository’s `SearchInBST` method.
+  - Example:
+    ```csharp
+    var result = _repository.SearchInBST(requestId);
+    if (result != null)
+    {
+        ServiceRequests.Clear();
+        ServiceRequests.Add(result);
+    }
+    ```
 
 #### **Advantages**:
-- **Search Efficiency**: Time complexity is \(O(\log n)\) for search operations in a balanced BST.
-- **Scalability**: Handles large datasets efficiently compared to linear search methods.
+- **Search Efficiency**: The time complexity for search operations is \(O(\log n)\) in a balanced BST.
+- **Dynamic Updates**: Any new, updated, or deleted requests are immediately reflected in the BST.
 
-#### **Example in Application**:
-When a user searches for a request by ID, the application leverages the BST to quickly locate the request without iterating through the entire list.
+#### **Example**:
+When a user searches for a request with ID `17`, the application queries the BST, quickly locating the request without iterating over the entire list.
 
 ---
 
 ### 2. **Max Heap**
 
 #### **Role**:
-- Maintains prioritized service requests, ensuring the request with the highest priority is always at the root.
-- Used in the "Prioritized Requests" tab to display requests based on their importance or urgency.
+- The Max Heap ensures that the service request with the highest priority is always at the root.
+- It is used in the "Prioritized Requests" tab to display requests in descending order of priority.
+
+#### **Implementation**:
+- The `MaxHeap` class is initialized during the repository setup in the `InitializeHeap` method.
+- All existing service requests are added to the heap during initialization.
+- New requests are inserted into the heap using `_maxHeap.Insert(request)`.
+
+#### **Integration**:
+- **Repository Integration**:
+  - The heap is updated dynamically during the `AddServiceRequest` method.
+  - Prioritized requests are extracted from the heap using the `GetPrioritizedRequests` method, which clears and refills the heap to maintain its structure.
+- **ViewModel Integration**:
+  - The `LoadPrioritizedRequests` command in the `ServiceRequestStatusViewModel` fetches prioritized requests from the repository.
+  - Example:
+    ```csharp
+    foreach (var request in _repository.GetPrioritizedRequests())
+    {
+        PrioritizedRequests.Add(request);
+    }
+    ```
 
 #### **Advantages**:
-- **Optimal Retrieval**: Always retrieves the highest-priority request in \(O(1)\) time.
-- **Dynamic Management**: Allows for insertion and removal of requests while maintaining the heap property.
+- **Dynamic Prioritization**: Automatically adjusts the highest-priority request as new tasks are added or removed.
+- **Efficient Retrieval**: The highest-priority request can be accessed in \(O(1)\) time.
 
-#### **Example in Application**:
-If a new high-priority request (e.g., "Flood Control") is added, the heap ensures it is appropriately placed at the top for immediate attention.
+#### **Example**:
+If a new request with priority `100` is added, it will automatically appear at the top of the "Prioritized Requests" tab.
 
 ---
 
 ### 3. **Graph**
 
 #### **Role**:
-- Represents dependencies between service requests as a directed graph.
-- Each node corresponds to a request, and edges represent dependencies between them.
+- The Graph represents dependencies between service requests.
+- Each node corresponds to a service request, and edges represent dependencies between them.
+
+#### **Implementation**:
+- The `Graph` class is initialized during the repository setup in the `InitializeGraph` method.
+- Dependencies are added using the `_graph.AddEdge(request.RequestId, dependency)` method.
+- The graph supports operations like dependency retrieval (`GetDependencies`) and topological sorting (`TopologicalSort`).
+
+#### **Integration**:
+- **Repository Integration**:
+  - Dependencies are added to the graph during the `AddServiceRequest` method.
+  - The `GetDependencies(int requestId)` method retrieves dependencies for a specific request.
+- **ViewModel Integration**:
+  - The `LoadDependencies` command in the `ServiceRequestStatusViewModel` fetches dependencies for a selected request.
+  - Example:
+    ```csharp
+    foreach (var dep in dependencies)
+    {
+        var request = _repository.GetRequestById(dep);
+        if (request != null)
+        {
+            DependencyRequests.Add(request);
+        }
+    }
+    ```
 
 #### **Advantages**:
-- **Dependency Management**: Allows visualization of request dependencies, ensuring dependent tasks are completed in the correct order.
-- **Topological Sorting**: Provides a sequence in which requests should be processed based on their dependencies.
+- **Dependency Management**: Helps in visualizing and managing tasks that depend on each other.
+- **Topological Sorting**: Ensures requests are processed in the correct order, respecting dependencies.
 
-#### **Example in Application**:
-If "Water Supply Issue" depends on resolving "Sewer Backup," the graph ensures this relationship is represented, and the TreeView visualization displays it effectively.
+#### **Example**:
+If "Water Supply Issue" depends on "Sewer Backup," this relationship is represented as an edge in the graph and visualized in the "Request Dependencies" tab.
 
 ---
 
 ### 4. **Priority Queue**
 
 #### **Role**:
-- Internally implemented using a heap to handle recommended events and announcements.
-- Ensures that events or announcements with the highest user interaction are shown at the top.
+- A priority queue (backed by the Max Heap) handles tasks and events requiring priority-based management.
+
+#### **Implementation**:
+- The priority queue leverages the Max Heap, ensuring efficient insertion and retrieval of high-priority items.
+
+#### **Integration**:
+- The priority queue is indirectly used in the "Prioritized Requests" tab through the Max Heap.
+- Recommendations and event prioritization also leverage this data structure.
 
 #### **Advantages**:
-- **Efficient Organization**: Keeps frequently interacted events prioritized for display.
-- **Dynamic Updates**: Allows real-time adjustments based on user engagement.
+- **Efficiency**: Ensures the highest-priority tasks/events are displayed first.
+- **Scalability**: Can handle dynamic additions and updates without degrading performance.
 
-#### **Example in Application**:
-If users frequently search for "Music Events," these events are prioritized in the recommendation tab.
+#### **Example**:
+In the "Prioritized Requests" tab, the queue ensures that tasks like "Flood Control" appear higher due to their critical nature.
 
+---
+
+### 5. **Dictionaries**
+
+#### **Role**:
+- Dictionaries are used to store and quickly retrieve service requests, events, and announcements based on unique keys.
+
+#### **Integration**:
+- **Repository Integration**:
+  - The `GetRequestById(int requestId)` method retrieves a request using LINQ but could be optimized using a dictionary.
+- **Advantages**:
+  - **Fast Lookups**: Average time complexity of \(O(1)\) for retrieval operations.
+  - **Ease of Use**: Simplifies data storage and retrieval.
+
+---
+
+## Integration Summary
+
+The repository acts as a bridge, integrating these data structures to manage service requests effectively:
+
+1. **Adding a Request**:
+   - The request is added to the in-memory list (`_serviceRequests`).
+   - It is also inserted into the BST and Max Heap for efficient searching and prioritization.
+   - Dependencies are added to the graph.
+
+2. **Searching for a Request**:
+   - The ViewModel invokes the repository's `SearchInBST` or `SearchRequests` methods.
+   - The repository queries the BST or performs a linear search based on the use case.
+
+3. **Prioritizing Requests**:
+   - Requests are managed dynamically in the Max Heap.
+   - The "Prioritized Requests" tab retrieves and displays these in order of importance.
+
+4. **Visualizing Dependencies**:
+   - The graph ensures that dependencies are clearly mapped.
+   - The TreeView in the "Request Dependencies" tab displays these relationships hierarchically.
+
+This seamless integration between the repository, ViewModel, and advanced data structures ensures a robust and user-friendly application.
 ---
 
 ## License
