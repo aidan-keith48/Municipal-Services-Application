@@ -8,11 +8,16 @@ namespace Municipal_Services_Application.Repositories
 {
     public class ServiceRequestRepository : IServiceRequestRepository
     {
+        // List to store all service requests
         private readonly List<ServiceRequest> _serviceRequests;
+        // Binary Search Tree to store and manage service requests
         private BinarySearchTree _bst;
+        // Max Heap to prioritize service requests
         private MaxHeap _maxHeap;
+        // Graph to manage dependencies between service requests
         private Graph _graph;
 
+        // Constructor to initialize the repository and seed initial data
         public ServiceRequestRepository()
         {
             _serviceRequests = new List<ServiceRequest>();
@@ -22,30 +27,37 @@ namespace Municipal_Services_Application.Repositories
             InitializeGraph();
         }
 
+        // Method to get all service requests
         public IEnumerable<ServiceRequest> GetAllRequests()
         {
             return _serviceRequests;
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to get a service request by its ID
         public ServiceRequest GetRequestById(int requestId)
         {
             return _serviceRequests.FirstOrDefault(r => r.RequestId == requestId);
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to add a new service request
         public void AddServiceRequest(ServiceRequest request)
         {
             _serviceRequests.Add(request);
-            _bst.Insert(request); // Insert into BST
-            _maxHeap.Insert(request); // Insert into Heap
+            _bst.Insert(request); // Insert into Binary Search Tree
+            _maxHeap.Insert(request); // Insert into Max Heap
             if (request.Dependencies != null && request.Dependencies.Any())
             {
                 foreach (var dependency in request.Dependencies)
                 {
-                    _graph.AddEdge(request.RequestId, dependency); // Add dependencies to graph
+                    _graph.AddEdge(request.RequestId, dependency); // Add dependencies to Graph
                 }
             }
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to update an existing service request
         public void UpdateServiceRequest(ServiceRequest request)
         {
             var existingRequest = GetRequestById(request.RequestId);
@@ -58,26 +70,32 @@ namespace Municipal_Services_Application.Repositories
                 existingRequest.Priority = request.Priority;
             }
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to delete a service request by its ID
         public void DeleteServiceRequest(int requestId)
         {
             var request = GetRequestById(requestId);
             if (request != null)
             {
                 _serviceRequests.Remove(request);
-                _bst.Remove(request.RequestId); // Remove from BST
-                _maxHeap.Remove(request); // Remove from Heap
+                _bst.Remove(request.RequestId); // Remove from Binary Search Tree
+                _maxHeap.Remove(request); // Remove from Max Heap
                 _graph.RemoveNode(request.RequestId); // Remove from Graph
             }
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to search for service requests by a search text
         public IEnumerable<ServiceRequest> SearchRequests(string searchText)
         {
             return _serviceRequests.Where(r =>
                 r.Title.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0 ||
                 r.RequestId.ToString().Contains(searchText));
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to seed initial data for service requests
         private void SeedData()
         {
             // Sample data to simulate initial service requests
@@ -132,8 +150,9 @@ namespace Municipal_Services_Application.Repositories
             _serviceRequests.Add(new ServiceRequest(49, "Public Park Pathway Repair", "Pending", DateTime.Now.AddDays(-49), 100, 49, null));
             _serviceRequests.Add(new ServiceRequest(50, "Public Park Playground Repair", "In Progress", DateTime.Now.AddDays(-50), 100, 50, null));
         }
+        //----------------------------------------------------------------------------------
 
-        // Initialize Binary Search Tree
+        // Method to initialize the Binary Search Tree with existing service requests
         public void InitializeBST()
         {
             _bst = new BinarySearchTree();
@@ -142,13 +161,16 @@ namespace Municipal_Services_Application.Repositories
                 _bst.Insert(request);
             }
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to search for a service request in the Binary Search Tree by its ID
         public ServiceRequest SearchInBST(int requestId)
         {
             return _bst.Search(requestId);
         }
+        //----------------------------------------------------------------------------------
 
-        // Initialize Max Heap
+        // Method to initialize the Max Heap with existing service requests
         public void InitializeHeap()
         {
             _maxHeap = new MaxHeap();
@@ -157,7 +179,9 @@ namespace Municipal_Services_Application.Repositories
                 _maxHeap.Insert(request);
             }
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to get service requests in prioritized order from the Max Heap
         public IEnumerable<ServiceRequest> GetPrioritizedRequests()
         {
             var results = new List<ServiceRequest>();
@@ -167,8 +191,9 @@ namespace Municipal_Services_Application.Repositories
             }
             return results;
         }
+        //----------------------------------------------------------------------------------
 
-        // Initialize Graph
+        // Method to initialize the Graph with existing service requests and their dependencies
         public void InitializeGraph()
         {
             _graph = new Graph();
@@ -183,31 +208,43 @@ namespace Municipal_Services_Application.Repositories
                 }
             }
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to get the dependencies of a service request by its ID
         public IEnumerable<int> GetDependencies(int requestId)
         {
             return _graph.GetDependencies(requestId);
         }
+        //----------------------------------------------------------------------------------
 
+        // Method to perform a topological sort on the service requests based on their dependencies
         public IEnumerable<int> TopologicalSort()
         {
             return _graph.TopologicalSort();
         }
+        //----------------------------------------------------------------------------------
     }
 
+    /// <summary>
+    /// Interface for the Service Request Repository
+    /// This interface defines the contract for a repository that manages service requests.
+    /// It includes methods for CRUD operations (Create, Read, Update, Delete), searching,
+    /// and additional methods for handling prioritized requests, dependencies, and binary search.
+    /// </summary>
     public interface IServiceRequestRepository
     {
-        IEnumerable<ServiceRequest> GetAllRequests();
-        ServiceRequest GetRequestById(int requestId);
-        void AddServiceRequest(ServiceRequest request);
-        void UpdateServiceRequest(ServiceRequest request);
-        void DeleteServiceRequest(int requestId);
-        IEnumerable<ServiceRequest> SearchRequests(string searchText);
+        IEnumerable<ServiceRequest> GetAllRequests(); // Method to get all service requests
+        ServiceRequest GetRequestById(int requestId); // Method to get a service request by its ID
+        void AddServiceRequest(ServiceRequest request); // Method to add a new service request
+        void UpdateServiceRequest(ServiceRequest request); // Method to update an existing service request
+        void DeleteServiceRequest(int requestId); // Method to delete a service request by its ID
+        IEnumerable<ServiceRequest> SearchRequests(string searchText); // Method to search for service requests by a search text
 
-        // Add these methods
-        IEnumerable<ServiceRequest> GetPrioritizedRequests(); // For prioritized requests
-        IEnumerable<int> GetDependencies(int requestId); // For request dependencies (IDs of dependent requests)
-        ServiceRequest SearchInBST(int requestId); // For binary search
-        IEnumerable<int> TopologicalSort(); // Topological sorting for dependencies
+        // Additional methods for prioritized requests, dependencies, and binary search
+        IEnumerable<ServiceRequest> GetPrioritizedRequests(); // Method to get prioritized requests
+        IEnumerable<int> GetDependencies(int requestId); // Method to get dependencies (IDs of dependent requests) for a service request
+        ServiceRequest SearchInBST(int requestId); // Method to search for a service request in the Binary Search Tree by its ID
+        IEnumerable<int> TopologicalSort(); // Method to perform a topological sort on the service requests based on their dependencies
     }
+
 }

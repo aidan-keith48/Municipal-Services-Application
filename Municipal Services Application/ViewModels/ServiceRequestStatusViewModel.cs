@@ -13,6 +13,7 @@ namespace Municipal_Services_Application.ViewModels
 {
     public class ServiceRequestStatusViewModel : ViewModelBase
     {
+        // Repository to manage service requests
         private readonly IServiceRequestRepository _repository;
 
         // ObservableCollections to bind to the DataGrids in the UI
@@ -27,15 +28,18 @@ namespace Municipal_Services_Application.ViewModels
             get => _selectedServiceRequest;
             set => Set(ref _selectedServiceRequest, value);
         }
+        //-------------------------------------------------------------------------------------------
 
+        // Selected Request ID for loading dependencies
         private string _selectedRequestId;
         public string SelectedRequestId
         {
             get => _selectedRequestId;
             set => Set(ref _selectedRequestId, value);
         }
+        //-------------------------------------------------------------------------------------------
 
-        // New Request Properties
+        // Properties for creating a new service request
         public string NewRequestTitle { get; set; }
         public string NewRequestStatus { get; set; }
         public string NewRequestPriority { get; set; }
@@ -55,6 +59,7 @@ namespace Municipal_Services_Application.ViewModels
                 }
             }
         }
+        //-------------------------------------------------------------------------------------------
 
         // Commands for UI Interactions
         public ICommand SearchCommand { get; private set; }
@@ -63,6 +68,7 @@ namespace Municipal_Services_Application.ViewModels
         public ICommand SaveNewRequestCommand { get; private set; }
         public ICommand DeleteRequestCommand { get; private set; }
 
+        // Constructor to initialize the ViewModel
         public ServiceRequestStatusViewModel(IServiceRequestRepository repository)
         {
             _repository = repository;
@@ -86,6 +92,7 @@ namespace Municipal_Services_Application.ViewModels
             PerformSearch();
             LoadPrioritizedRequests();
         }
+        //-------------------------------------------------------------------------------------------
 
         // Perform search filtering for Service Requests (dynamic filtering)
         private void PerformSearch()
@@ -101,6 +108,7 @@ namespace Municipal_Services_Application.ViewModels
                 ServiceRequests.Add(request);
             }
         }
+        //-------------------------------------------------------------------------------------------
 
         // Use BST explicitly for precise search
         private void SearchUsingBST()
@@ -122,6 +130,7 @@ namespace Municipal_Services_Application.ViewModels
                 MessageBox.Show($"No service request found with ID: {requestId}");
             }
         }
+        //-------------------------------------------------------------------------------------------
 
         // Load prioritized requests from Max Heap
         private void LoadPrioritizedRequests()
@@ -133,6 +142,7 @@ namespace Municipal_Services_Application.ViewModels
                 PrioritizedRequests.Add(request);
             }
         }
+        //-------------------------------------------------------------------------------------------
 
         // Load dependencies for a specific request
         private void LoadDependencies()
@@ -161,6 +171,7 @@ namespace Municipal_Services_Application.ViewModels
                 }
             }
         }
+        //-------------------------------------------------------------------------------------------
 
         // Save a new request
         private void SaveNewRequest()
@@ -211,6 +222,7 @@ namespace Municipal_Services_Application.ViewModels
             NewRequestPriority = string.Empty;
             NewRequestDependencies = string.Empty;
         }
+        //-------------------------------------------------------------------------------------------
 
         // Delete a selected request
         private void DeleteSelectedRequest()
@@ -225,6 +237,7 @@ namespace Municipal_Services_Application.ViewModels
             PerformSearch(); // Reload requests
             MessageBox.Show("Request deleted successfully.");
         }
+        //-------------------------------------------------------------------------------------------
 
         // Show details of a selected request
         private void ViewDetails(ServiceRequest request)
@@ -240,5 +253,6 @@ namespace Municipal_Services_Application.ViewModels
                 $"Dependencies: {string.Join(", ", request.Dependencies)}"
             );
         }
+        //-------------------------------------------------------------------------------------------
     }
 }
