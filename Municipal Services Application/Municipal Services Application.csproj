@@ -72,14 +72,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data Structures\BinarySearchTree.cs" />
+    <Compile Include="Data Structures\Graph.cs" />
+    <Compile Include="Data Structures\MaxHeap.cs" />
+    <Compile Include="Helpers\NullToVisibilityConverter.cs" />
     <Compile Include="Model\AnnouncementModel.cs" />
     <Compile Include="Model\RecommenedEventsModel.cs" />
     <Compile Include="Model\LocalEventsModel.cs" />
+    <Compile Include="Model\ServiceRequest.cs" />
+    <Compile Include="Repositories\ServiceRequestRepository.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\IssueListViewModel.cs" />
     <Compile Include="ViewModels\LocalEventsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ReportIssueViewModel.cs" />
+    <Compile Include="ViewModels\ServiceRequestStatusViewModel.cs" />
     <Compile Include="Views\IssueListView.xaml.cs">
       <DependentUpon>IssueListView.xaml</DependentUpon>
     </Compile>
@@ -165,6 +172,45 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\search-svgrepo-com.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="images\EventPictures\1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\10.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\11.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\12.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\4.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\5.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\6.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\7.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\8.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\EventPictures\9.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
